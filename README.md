@@ -21,13 +21,13 @@
 ## 📸 Screenshots  
 
 ### 🏠 Home Page with Sidebar  
-![Home Page](/homepage.png)   
+![Home Page](public/homepage.png)   
 
 ### 📰 Article Page
 ![Article Page](/article.png)
 
 ### 📰 Article View with AI Analysis 
-![AI Analysis](/articleai.png)
+![AI Analysis](https://raw.githubusercontent.com/your-username/newshub/main/src/assets/articleai.png)
 
 
 ---
