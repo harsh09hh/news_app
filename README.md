@@ -21,10 +21,14 @@
 ## 📸 Screenshots  
 
 ### 🏠 Home Page with Sidebar  
-![Home Page](./assets/homepage.png)  
+![Home Page](./src/assets/homepage.png)   
 
-### 📰 Article View with AI Analysis  
-![Article Page](./assets/article.png)  
+### 📰 Article related to different field  
+![Article Page](./src/assets/article.png)
+
+### 📰 Article View with AI Analysis 
+![Article Page](./src/assets/articleai.png)
+
 
 ---
 
