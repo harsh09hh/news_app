@@ -63,25 +63,28 @@ const Differentcatigory=()=>{
        
     },[apiurl]);
 
-    return(
-         <div className="flex">
-      <SidebarProvider>
-        
-        <div className="w-[250px] h-screen fixed top-0 left-0 border-r z-50 bg-white">
-          <AppSidebar />
-        </div>
-            <h2>different page</h2>
-            
-            <div className=" flex grid grid-cols-3 gap-4">
-                {lodingcatigory.map((article ,index)=>(
-                    <Newscard article={article} key={index} />
+    return (
+  <div className="flex">
+    <SidebarProvider>
+      
+      <div className="w-[250px] h-screen fixed top-0 left-0 border-r z-50 bg-white">
+        <AppSidebar />
+      </div>
 
-                ))}
+      
+      <div className="ml-[250px] flex-1 p-4">
+        <h2 className="text-xl font-semibold mb-4">{category}</h2>
 
-            </div>
-            </SidebarProvider>
+        <div className="grid grid-cols-3 gap-4">
+          {lodingcatigory.map((article, index) => (
+            <Newscard article={article} key={index} />
+          ))}
         </div>
-    );
+      </div>
+    </SidebarProvider>
+  </div>
+);
+
 }
 
 export default Differentcatigory;

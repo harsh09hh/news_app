@@ -85,54 +85,68 @@ const article = state?.article ;
 
 
 
-  return (
-   <div className="max-w-3xl ml-20 p-6 space-y-6">
-  <h1 className="text-3xl font-bold text-gray-900">
-    {article.title}
-  </h1>
+return (
+  <div className="flex justify-center px-4 py-8 bg-gray-50 min-h-screen">
+    <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6 space-y-6">
+      
+      <h1 className="text-3xl font-bold text-gray-900 leading-snug">
+        {article.title}
+      </h1>
 
-  <img
-    src={article.urlToImage}
-    alt={article.title}
-    className="w-full rounded-lg shadow-md"
-  />
+      
+      {article.urlToImage && (
+        <img
+          src={article.urlToImage}
+          alt={article.title}
+          className="w-full rounded-xl shadow-md object-cover"
+        />
+      )}
 
-  <p className="text-gray-700 text-base">
-    {article.description}
-  </p>
+     
+      <p className="text-gray-700 text-lg">
+        {article.description}
+      </p>
 
-<p className="text-gray-600">
-  {article.content?.replace(/\[\+\d+ chars\]/, '')}
-</p>
+      <p className="text-gray-600 leading-relaxed">
+        {article.content?.replace(/\[\+\d+ chars\]/, '')}
+      </p>
 
-<a
-  href={article.url}
-  target="_blank"
-  className="text-blue-600 underline mt-2 inline-block"
->
-  Read more
-</a>
+     
+      <a
+        href={article.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block px-5 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition"
+      >
+        Read full article
+      </a>
 
-
-
-   {aiData && (
-        <div className="mt-6 p-4 bg-gray-100 rounded-lg space-y-2">
-          <h2 className="text-xl font-semibold">AI Analysis</h2>
+      {aiData && (
+        <div className="mt-8 p-6 bg-gray-100 rounded-xl space-y-4 shadow-inner">
+          <h2 className="text-2xl font-semibold text-gray-800">AI Analysis</h2>
           <p><strong>Leaning:</strong> {aiData.leaning.join(", ")}</p>
           <p><strong>Reliability:</strong> {aiData.source_Reliability.join(", ")}</p>
           <p><strong>Sentiment:</strong> {aiData.ai_Sentiment.join(", ")}</p>
-          <p><strong>AI Summary:</strong></p>
-          <ul className="list-disc list-inside">{aiData.ai_summary.map((s, i) => <li key={i}>{s}</li>)}</ul>
-          <p><strong>Key Points:</strong></p>
-          <ul className="list-disc list-inside">{aiData.ai_key_points.map((k, i) => <li key={i}>{k}</li>)}</ul>
+
+          <div>
+            <h3 className="font-semibold">AI Summary:</h3>
+            <ul className="list-disc list-inside text-gray-700 space-y-1">
+              {aiData.ai_summary.map((s, i) => <li key={i}>{s}</li>)}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">Key Points:</h3>
+            <ul className="list-disc list-inside text-gray-700 space-y-1">
+              {aiData.ai_key_points.map((k, i) => <li key={i}>{k}</li>)}
+            </ul>
+          </div>
         </div>
       )}
+    </div>
+  </div>
+);
 
-
- 
-</div>
-
-  );
 };
 
 export default Onclicknews;
