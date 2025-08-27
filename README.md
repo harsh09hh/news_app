@@ -2,7 +2,7 @@
 
 > A modern **news aggregation platform** that fetches the latest stories across multiple categories, displays them in an elegant UI, and provides **AI-powered analysis** for deeper insights.  
 
-![NewsHub Screenshot](./assets/screenshot.png)  
+
 
 ---
 
