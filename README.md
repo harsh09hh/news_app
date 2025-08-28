@@ -24,7 +24,7 @@
 ![Home Page](https://raw.githubusercontent.com/your-username/newshub/main/public/homepage.png)
 
 ### 📰 Article Page
-![Article Page](https://raw.githubusercontent.com/your-username/newshub/main/public/article.png)
+![Article Page](https://github.com/harsh09hh/news_app/blob/34e7a7eea5d671947570a7d380b0da27b290d6c9/article.png)
 
 ### 📰 Article View with AI Analysis 
 ![AI Analysis](https://raw.githubusercontent.com/your-username/newshub/main/src/assets/articleai.png)
