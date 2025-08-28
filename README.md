@@ -27,7 +27,7 @@
 ![Article Page](https://github.com/harsh09hh/news_app/blob/34e7a7eea5d671947570a7d380b0da27b290d6c9/article.png)
 
 ### 📰 Article View with AI Analysis 
-![AI Analysis](https://raw.githubusercontent.com/your-username/newshub/main/src/assets/articleai.png)
+![AI Analysis](https://github.com/harsh09hh/news_app/blob/e8fa2ec6a9e98afee9e9163dab6b9de42c9d577f/articleai.png)
 
 
 ---
