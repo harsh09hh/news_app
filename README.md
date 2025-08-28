@@ -21,7 +21,7 @@
 ## 📸 Screenshots  
 
 ### 🏠 Home Page with Sidebar  
-![Home Page](https://raw.githubusercontent.com/your-username/newshub/main/public/homepage.png)
+![Home Page](https://github.com/harsh09hh/news_app/blob/bb3e078d78edc6e0c04efabb487e4b480f110b99/homepage.png)
 
 ### 📰 Article Page
 ![Article Page](https://github.com/harsh09hh/news_app/blob/34e7a7eea5d671947570a7d380b0da27b290d6c9/article.png)
