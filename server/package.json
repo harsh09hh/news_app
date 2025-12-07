@@ -2,10 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
-   "scripts": {
+  "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js" },
+    "start": "node dist/server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "ai": "^4.3.17",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
+    "env": "^0.0.2",
     "express": "^5.1.0"
   },
   "devDependencies": {

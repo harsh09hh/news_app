@@ -3,7 +3,7 @@ import type Articles from "@/types"
 import { useLocation ,useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
-import { analyzeArticle } from "@/api/analyze";
+import { analyzeArticle } from "@/api/v1/analyze";
 
 
 
