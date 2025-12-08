@@ -1,0 +1,38 @@
+import { timeStamp } from "console";
+import mongoose from "mongoose";
+
+
+const userSchema=new mongoose.Schema({
+
+    name:{type:String,
+        required:[true,'user name is required'],
+        trim:true,
+        minLength:2,
+        maxLength:50,
+    },
+
+    email:{
+        type:String,
+        required:[true,'email is required'],
+        unique:true,
+        trim:true,
+        lowercase:true,
+        match:[/\S+@S+\.\S+/ ,'email is required'],
+    },
+
+
+    password:{
+        type:String,
+        require:[true,'user password is required'],
+        trim:true,
+        minLength:6,
+
+    }
+
+},{ timestamps:true });  // timeStamp will save created at and updated at 
+
+
+
+
+const UserModel =mongoose.model('UserModel',userSchema);
+export default UserModel;
