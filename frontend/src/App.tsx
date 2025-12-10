@@ -5,7 +5,9 @@ import Home from './pages/Home'
 import  OnclickNews from './pages/OnclickNews';
 import Differentcatigory from './pages/differentcatigory';
 import Localnewspage from './pages/Localnewspage';
-
+import { SigninForm } from './pages/auth/SigninForm';
+import { SignUpForm } from './pages/auth/signUpForm';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 
@@ -13,12 +15,14 @@ function App() {
     <>
      <Router>
       <Routes>
-      <Route path='/' element={<Home/>}  />
+        <Route element={<ProtectedRoute/>}> 
+      <Route path='/dashboard' element={<Home/>}  />
       <Route path='/detail' element={<OnclickNews/>}/>
       <Route path='/local' element={<Localnewspage/>}/>
       <Route path='/:category' element={<Differentcatigory/>}/>
-   
-
+        </Route > 
+      <Route path='/sign-in' element={<SigninForm/>} />
+      <Route path='/sign-up' element={<SignUpForm/>} />
       </Routes>
       
      </Router>

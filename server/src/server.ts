@@ -9,9 +9,14 @@ import { PORT } from './config/env';
 import connectionToDatabase from './database/mongodb';
 import errorMiddelware from './middelware/error.middleware';
 import userRoutes from './Routes/user.routes';
-
+import cors from "cors"
 
 const app =express();
+app.use(cors({
+    origin: "http://localhost:5173", // your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }))
   
 app.use(express.json());
 
