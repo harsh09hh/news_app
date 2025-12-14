@@ -26,6 +26,8 @@ const Differentcatigory=()=>{
 
 
     const differentApi: Record<string,string> = {
+    latest:`https://newsapi.org/v2/everything?q=news&language=en&from=2025-12-04&to=2025-12-14&sortBy=publishedAt&pageSize=100&apiKey=${API_KEY}`,
+    trending:`https://newsapi.org/v2/everything?q=news&language=en&sortBy=popularity&pageSize=50&apiKey=${API_KEY}`,
     sports: `https://newsapi.org/v2/everything?q=sports&apiKey=${API_KEY}`,
     fintech: `https://newsapi.org/v2/everything?q=fintech&apiKey=${API_KEY}`,
     technology: `https://newsapi.org/v2/everything?q=technology&apiKey=${API_KEY}`,

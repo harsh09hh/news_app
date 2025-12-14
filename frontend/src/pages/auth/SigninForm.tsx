@@ -27,8 +27,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     setLoading(true)
 
     try{
-      const data =await singIN(email ,password);
-      localStorage.setItem("token",data.token);
+      await singIN(email ,password);
       navigate('/dashboard');
     
     }

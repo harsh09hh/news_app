@@ -6,7 +6,12 @@ import UserModel from "../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { JWT_SECRET,JWT_EXPIRES_IN} from "../config/env";
+import { createAccessToken, createRefreshToken, setAuthCookies,JwtPayload, clearAuthCookies } from "../utils/tokens";
+import { JWT_REFRESH_SECRET } from "../config/env";
+
+
+
+
 
 
 interface CustomError extends Error{
@@ -25,7 +30,7 @@ export const signup=async(req:Request,res:Response,next:NextFunction)=>{
         
        const {name,email ,password} =req.body;
 
-        const existingUser= await UserModel.findOne({email});
+        const existingUser= await UserModel.findOne({email}).session(session);
         if(existingUser){
             const message= "User already exists"
             const error: CustomError = new Error(message);
@@ -34,7 +39,6 @@ export const signup=async(req:Request,res:Response,next:NextFunction)=>{
 
         } 
 
-        //Hashed Password
         const salt =  await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password,salt);
         
@@ -42,24 +46,30 @@ export const signup=async(req:Request,res:Response,next:NextFunction)=>{
             name,
             email,
             password:hashedPassword});  
-
-        await newUser.save({session});
-        
-
-
-        const token= jwt.sign({userId:newUser._id.toString()},
-                      JWT_SECRET,
-                      {expiresIn:JWT_EXPIRES_IN}                              
-        )
         
         
-        await session.commitTransaction();
-        session.endSession();
+
+   const payload: JwtPayload = { userId: newUser._id.toString() };
+
+        const refreshToken= createRefreshToken(payload);
+        
+        const accessToken= createAccessToken(payload);
+
+
+
+    const hashedrefreshtoken= await bcrypt.hash(refreshToken,10);
+    newUser.refreshtoken=hashedrefreshtoken;
+    await newUser.save({session});
+
+    await session.commitTransaction();
+    session.endSession();
+
+
+    setAuthCookies(res,accessToken,refreshToken);
 
         return res.status(201).json({
                 success: true,
                 message:"user created successfully",
-                token,
                 user: {
                  id: newUser._id,
                  name: newUser.name,
@@ -83,14 +93,20 @@ export const signup=async(req:Request,res:Response,next:NextFunction)=>{
 
 
 
+
+
 export const signin=async(req:Request,res:Response,next:NextFunction)=>{
+
+  const session =await mongoose.startSession();
+  session.startTransaction();
+
 
 try{
 
     const{email,password}=req.body;
 
 
-    const currentUser=await UserModel.findOne({email});
+    const currentUser=await UserModel.findOne({email}).session(session);
 
     if(!currentUser){
         const error:CustomError=new Error("User not found");
@@ -109,15 +125,25 @@ try{
 
     }
 
-    const token= jwt.sign({userId:currentUser._id.toString()},
-                      JWT_SECRET,
-                      {expiresIn:JWT_EXPIRES_IN}                              
-    )
-        
+    const payload:JwtPayload={
+        userId:currentUser._id.toString()
+    };
+
+    
+    const refreshToken=createRefreshToken(payload);
+    const accessToken=createAccessToken(payload);
+
+    currentUser.refreshtoken=await bcrypt.hash(refreshToken,10);
+    await currentUser.save({session});
+
+
+    setAuthCookies(res,accessToken,refreshToken);
+    await session.commitTransaction();
+    session.endSession();
+ 
     return res.status(200).json({
         success: true,
         message:"user signed in successfully",
-        token,
         user: {
         id: currentUser._id,
         name: currentUser.name,
@@ -131,6 +157,9 @@ try{
 }   
 catch(error){
     next(error)
+    session.abortTransaction();
+    session.endSession();
+
 
 
 }
@@ -138,7 +167,99 @@ catch(error){
 
 };
 
-export const signout=(req:Request,res:Response,next:NextFunction)=>{
+export const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+
+    const session =await mongoose.startSession();
+    session.startTransaction();
 
 
+  try {
+    const tokenFromCookie = req.cookies?.refreshToken;
+    if (!tokenFromCookie) {
+      throw  new Error("Refresh token missing", );
+    }
+    let decoded: any;
+    try {
+      decoded = jwt.verify(tokenFromCookie, JWT_REFRESH_SECRET) 
+    } catch {
+      throw new Error("Invalid refresh token", );
+    }
+
+    const userId = decoded.userId;
+    const user = await UserModel.findById(userId).session(session);
+    if (!user || !user.refreshtoken) {
+      throw new Error("Refresh token not found");
+    }
+
+
+    const isValid = await bcrypt.compare(tokenFromCookie, user.refreshtoken);
+    if (!isValid) {
+      throw new Error("Refresh token does not match");
+    }
+
+    const payload: JwtPayload = { userId };
+    const newAccessToken = createAccessToken(payload);
+
+    // just update access token cookie
+    setAuthCookies(res, newAccessToken, tokenFromCookie);
+
+    await session.commitTransaction();
+    session.endSession();
+
+
+    return res.status(200).json({
+      success: true,
+      message: "Access token refreshed",
+    });
+
+
+  } catch (error) {
+
+
+   await  session.abortTransaction();
+    session.endSession();
+
+     next(error);
+  }
+};
+
+
+export const signout=async(req:Request,res:Response,next:NextFunction)=>{
+
+
+    const session =await mongoose.startSession();
+    session.startTransaction(); 
+  try {
+    const tokenFromCookie = req.cookies?.refreshToken;
+
+    if (tokenFromCookie) {
+ 
+      const decoded = jwt.decode(tokenFromCookie) as JwtPayload | null;
+      if (decoded?.userId) {
+        const user = await UserModel.findById(decoded.userId).session(session);
+        if (user) {
+          user.refreshtoken = null;
+          await user.save({session});
+        }
+      }
+    }
+
+    clearAuthCookies(res);
+    
+    
+    session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    next(error);
+
+
+    
+   await session.abortTransaction();
+    session.endSession();
+  }
 };

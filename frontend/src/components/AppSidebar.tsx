@@ -33,7 +33,10 @@ export function AppSidebar() {
         <SidebarHeader>
             <div className="flex items-center gap-2 text-xl font-bold">
             <Newspaper className=" text-blue-500"/>
-            <span>NewsHub</span>
+            <a href="/dashboard">
+              <span>NewsHub</span>
+            </a>
+            
             </div>
             <SidebarInput placeholder="search news"/>
         </SidebarHeader>
@@ -44,7 +47,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
-                            <a href="#">
+                            <a href="/latest">
                                 <Clock/>
                                 <span>Latest News</span>
                             </a>
@@ -101,7 +104,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <a >
                     <Globe />
                     <span>World</span>
                   </a>
@@ -111,7 +114,7 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild onClick={()=>{
                   navigate('/politics')
                 }}>
-                  <a href="#">
+                  <a >
                     <Users />
                     <span>Politics</span>
                   </a>
@@ -128,7 +131,7 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <a >
                     <Newspaper />
                     <span>Times Of India</span>
                   </a>
@@ -136,7 +139,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <a >
                     <Newspaper />
                     <span>The Hindu</span>
                   </a>
@@ -144,7 +147,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <a >
                     <Newspaper />
                     <span className="font-serif">Ndtv-News</span>
                   </a>

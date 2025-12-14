@@ -33,8 +33,7 @@ export function SignUpForm({ className, ...props }: React.ComponentProps<"div">)
 
 
     try{
-    const data = await signUp(name,email,password);
-    localStorage.setItem("token",data.token);
+         await signUp(name,email,password);
 
     navigate('/dashboard');
     }

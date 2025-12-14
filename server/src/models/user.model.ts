@@ -28,6 +28,11 @@ const userSchema=new mongoose.Schema({
         trim:true,
         minLength:6,
 
+    },
+    refreshtoken:{
+        type:String,
+        default:null,
+       
     }
 
 },{ timestamps:true });  // timeStamp will save created at and updated at 
