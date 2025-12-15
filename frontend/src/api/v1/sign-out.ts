@@ -1,12 +1,9 @@
-import axios from "axios";
+import api from "./axios";
 
 export const signOut = async () => {
-  const response = await axios.post(
-    "http://localhost:5500/api/v1/auth/sign-out",
-    {},
-    {
-      withCredentials: true, 
-    }
+  const response = await api.post(
+    "/auth/sign-out",
+    {}
   );
 
   return response.data;

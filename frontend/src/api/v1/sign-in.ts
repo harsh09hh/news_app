@@ -1,22 +1,11 @@
-import axios from "axios";
-
+import api from "./axios";
 
 export async function singIN(email:string,password:string){
 
-    const response =await axios.post("http://localhost:5500/api/v1/auth/sign-in",
-     
-        {email,password},
-        {
-            withCredentials:true,
-           
-            headers: {
-                "Content-Type": "application/json",
-            },
-
-            
-        },
-        
-    );
+    const response =await api.post("/auth/sign-in",{
+        email,
+        password
+    });
 
    
     return response.data;

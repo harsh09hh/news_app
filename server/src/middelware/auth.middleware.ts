@@ -15,12 +15,13 @@ export const requireAuth = (req: AuthedRequest, res: Response, next: NextFunctio
       return res.status(401).json({ success: false, message: "Not authenticated" });
     }
 
-    const decoded = jwt.verify(token, JWT_ACCESS_SECRET) as {
-      userId: string;
-    };
+    const decoded = jwt.verify(
+      token,
+      JWT_ACCESS_SECRET
+    ) 
     req.userId = decoded.userId;
-
     next();
+
   } catch (error) {
     return res.status(401).json({ success: false, message: "Invalid or expired token" });
   }
