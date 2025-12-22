@@ -1,4 +1,4 @@
-import { timeStamp } from "console";
+
 import mongoose from "mongoose";
 
 
@@ -33,6 +33,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:null,
        
+    },
+    otp:{
+        type:String,
+        default:null,   
     }
 
 },{ timestamps:true });  // timeStamp will save created at and updated at 
