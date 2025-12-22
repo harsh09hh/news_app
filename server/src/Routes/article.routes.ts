@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { GuardianFintech } from "../controller/Article.controller";
+import { GuardianPolitics } from "../controller/Article.controller";
 
 const GuardianArticle =Router();
 
 
-GuardianArticle.get('/fintech',GuardianFintech );
+GuardianArticle.get('/politics',GuardianPolitics );
 
 
 export default GuardianArticle;

@@ -29,7 +29,7 @@ interface GuardianApiResponse {
 }
 
 
-export async function GuardianFintech(req:Request,res:Response,next:NextFunction){
+export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
 
 
     try{
@@ -39,8 +39,7 @@ export async function GuardianFintech(req:Request,res:Response,next:NextFunction
 
     {
         params:{
-           q:"fintech OR finance OR startup",
-           section: "business",
+          section: "politics",
           "order-by": "newest",
           "show-fields": "headline,trailText,thumbnail",
           "page-size": 20,

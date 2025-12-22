@@ -4,13 +4,18 @@ import type Articles from "../types";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
+import { GuardianPoliticsArticle } from "@/api/v1/Guardianarticle";
+import { mapGuardianToArticle } from "@/lib/utils";
+import type { GuardianArticle } from "../types";
+import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
+
 
 const Home=()=>{
    const[globalnews ,setglobalnews]= useState<Articles[]>([]);
     const [isloading ,setisloading]=useState(false);
 
     const[tendingnews ,settending]= useState<Articles[]>([]);
-    const[politics,setpolitics]=useState<Articles[]>([]);
+    const[politics,setpolitics]=useState<GuardianArticle[]>([]);
     const[business,setbusiness]=useState<Articles[]>([]);
     const[crypto,setcrypto]=useState<Articles[]>([]);
     const[stock,setstock]=useState<Articles[]>([]);
@@ -19,7 +24,7 @@ const Home=()=>{
     const[thehindu ,setthehindu]=useState<Articles[]>([]);
     const[nbc ,setnbc]=useState<Articles[]>([]);
      const[timesofindia ,settimesofindia]=useState<Articles[]>([]);
-    
+   
 
 
     const API_KEY =import.meta.env.VITE_PUBLIC_NEWS_API;
@@ -58,27 +63,7 @@ const loadTrendingNews=async ()=>{
 
 }
 
-const loadplolticsNews=async ()=>{
 
-    try{
-        setisloading(true);
-    
-    const endpoint=`	https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=${API_KEY}`
-
-    const response= await fetch(endpoint);
-    if(!response.ok){
-        console.log("failed to fetch terndingnews");
-    }
-
-    const data = await response.json();
-    setpolitics(data.articles ||[]);
-    }
-    catch(error){
-        console.log("trending news",error);
-        setpolitics([]);
-    }
-    finally{setisloading(false)};
-}
 
 
 
@@ -285,7 +270,6 @@ const loadtimesofindia=async ()=>{
 useEffect(()=>{
     
     loadTrendingNews();
-    loadplolticsNews();
     loadbusinessNews();
     loadcryptoNews();
     loadstocknews();
@@ -294,6 +278,10 @@ useEffect(()=>{
    loadnbs();
    loadnewyorktimes();
    loadtimesofindia();
+   
+GuardianPoliticsArticle()
+    .then(({ article }) => setpolitics(article))
+    .catch(console.error);
 
 },[])
 
@@ -341,14 +329,14 @@ useEffect(()=>{
 
 
            <section>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Tech</h2>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Politics</h2>
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
                   <p>Loading Trending News...</p>
                 ) : (
                  politics.map((article, index) => (
-                    <Newscard key={index} article={article} />
+                    <GuardianNewsCars key={index} article={article}/>
                   ))
                 )}
               </div>

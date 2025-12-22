@@ -17,6 +17,7 @@ export default interface Articles {
 }
 
 export interface GuardianArticle{
+    source:"the guardian"
     id:string,
     title:string,
     description:string,
@@ -26,7 +27,7 @@ export interface GuardianArticle{
 }
 
 export interface GuardianResponse{
-    success:string,
+    success:boolean,
     article:GuardianArticle[],
 }
 
