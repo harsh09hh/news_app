@@ -5,8 +5,6 @@ import { useLocation ,useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { analyzeArticle } from "@/api/v1/analyze";
 
-
-
 interface  AIresponse{
   ai_summary :string[],
   leaning:string[],
@@ -15,8 +13,6 @@ interface  AIresponse{
   ai_Sentiment:string[]
 
 }
-
-
 
 
 

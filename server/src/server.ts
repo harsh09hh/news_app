@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import subscriptionRouter from './Routes/Subscription.routes';
+import GuardianArticle from './Routes/article.routes';
 import authRouter from './Routes/auth.routes';
 import Summary from './Routes/gemni.routes';
 import { PORT } from './config/env';
@@ -29,6 +30,7 @@ app.use('/api/v1/subscription',subscriptionRouter);
 app.use('/api/v1/auth',authRouter);
 app.use('/api/v1/analyze',Summary);
 app.use('/api/v1/users',userRoutes);
+app.use('/api/v1/articles',GuardianArticle);
 
 app.use(errorMiddelware);
 

@@ -16,6 +16,21 @@ export default interface Articles {
 
 }
 
+export interface GuardianArticle{
+    source:"the guardian"
+    id:string,
+    title:string,
+    description:string,
+    image:string,
+    publishedAt:string,
+    apiUrl:string,
+}
+
+export interface GuardianResponse{
+    success:boolean,
+    article:GuardianArticle[],
+}
+
 
 export interface NewsDataIOArticle {
   article_id: string;

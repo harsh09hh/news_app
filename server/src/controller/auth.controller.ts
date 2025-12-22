@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import UserModel from "../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import crypto from "crypto";
 import { createAccessToken, createRefreshToken, setAuthCookies,JwtPayload, clearAuthCookies } from "../utils/tokens";
 import { JWT_REFRESH_SECRET } from "../config/env";
 
@@ -263,3 +263,33 @@ export const signout=async(req:Request,res:Response,next:NextFunction)=>{
     session.endSession();
   }
 };
+
+
+
+export const forgot_password =async(req:Request,res:Response,next:NextFunction)=>{
+
+
+
+  const session= await mongoose.startSession();
+  session.startTransaction();
+
+  try{
+
+    const {email}= req.body;
+    const user= UserModel.findOne(email);
+    if(!user){
+      return res.status(200).json({message:"If the email exists, a reset link was sent"});
+
+    }
+
+
+    const resetToken= crypto.randomBytes(32).toString("hex");
+
+    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    
+  
+  }
+
+  catch(error){}
+
+}
