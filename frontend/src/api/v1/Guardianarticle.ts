@@ -1,4 +1,5 @@
 
+import axios from "axios";
 import api from "./axios";
 
 import type  { GuardianResponse } from "@/types";
@@ -7,7 +8,7 @@ export async function GuardianPoliticsArticle(){
 
     try{
 
-    const result = await api.get<GuardianResponse>("/articles/politics");
+    const result = await api.get<GuardianResponse>("/Guardian/politics");
     
     return  result.data;
     
@@ -18,4 +19,16 @@ export async function GuardianPoliticsArticle(){
     throw new Error("Unable to load articles");
     }
 
+}
+
+
+export async function ParticularGuardianArticle(apiUrl:string){
+
+    const result = await api.get("/Guardian/article",{
+        params:{
+            apiUrl,
+        },  
+    });
+    return result.data;
+    
 }

@@ -29,6 +29,30 @@ interface GuardianApiResponse {
 }
 
 
+interface GuardianContent {
+  id:string,
+  webPublicationDate:string,
+  webTitle:string,
+  webUrl:string,
+  apiUrl:string,
+  fields:{
+    headline?:string,
+    trailText?:string,
+    body?:string,
+    thumbnail?:string,
+  }
+
+}
+
+interface GuardianSingleResponse {
+   response: {
+    status: string;
+    content: GuardianContent;
+  };
+
+}
+
+
 export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
 
 
@@ -83,3 +107,61 @@ catch (error) {
   }
 }
 
+
+export async function ParticularGuardianArticle(req:Request,res:Response,next:NextFunction){
+
+
+  try{
+    const {apiUri}= req.body;
+
+    if(!apiUri){
+      res.status(400).json({
+        success:false,
+        message: "apiUrl is required",
+      })
+    }
+
+    const result=axios.get<GuardianSingleResponse>(apiUri,{
+      params:{
+        "show-fields": "body,headline,trailText,thumbnail",
+        "api-key": process.env.GUARDIAN_API_KEY,
+      },
+    });
+
+    const content = (await result).data.response.content;
+    
+    
+    const article = {
+       id:content.id,
+       webPublicationDate:content.webPublicationDate,
+       webTitle:content.webTitle,
+       webUrl:content.webUrl,
+       apiUrl:content.apiUrl,
+  fields:{
+    headline:content.fields?.headline,
+    trailText:content.fields?.trailText,
+    body:content.fields?.body,
+    thumbnail:content.fields?.thumbnail,
+        }
+
+      }
+    
+
+      return res.status(200).json({
+        success:true,
+        article,
+      });
+
+    
+
+  }
+  catch(error){
+
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch Guardian article",
+    });
+
+  }
+}

@@ -30,7 +30,7 @@ app.use('/api/v1/subscription',subscriptionRouter);
 app.use('/api/v1/auth',authRouter);
 app.use('/api/v1/analyze',Summary);
 app.use('/api/v1/users',userRoutes);
-app.use('/api/v1/articles',GuardianArticle);
+app.use('/api/v1/Guardian',GuardianArticle);
 
 app.use(errorMiddelware);
 
