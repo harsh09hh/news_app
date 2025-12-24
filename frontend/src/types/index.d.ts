@@ -57,3 +57,20 @@ export interface Biasearticle extends Articles{
 
 }
 
+
+
+
+export  interface GuardianContent {
+  id:string,
+  webPublicationDate:string,
+  webTitle:string,
+  webUrl:string,
+  apiUrl:string,
+  fields:{
+    headline?:string,
+    trailText?:string,
+    body?:string,
+    thumbnail?:string,
+  }
+
+}

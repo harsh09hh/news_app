@@ -108,60 +108,40 @@ catch (error) {
 }
 
 
-export async function ParticularGuardianArticle(req:Request,res:Response,next:NextFunction){
+export async function ParticularGuardianArticle(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { apiUrl } = req.query;
 
-
-  try{
-    const {apiUri}= req.body;
-
-    if(!apiUri){
-      res.status(400).json({
-        success:false,
+    if (!apiUrl) {
+      return res.status(400).json({
+        success: false,
         message: "apiUrl is required",
-      })
+      });
     }
 
-    const result=axios.get<GuardianSingleResponse>(apiUri,{
-      params:{
+    const decodedUrl = decodeURIComponent(apiUrl as string);
+
+    const result = await axios.get<GuardianSingleResponse>(decodedUrl, {
+      params: {
         "show-fields": "body,headline,trailText,thumbnail",
         "api-key": process.env.GUARDIAN_API_KEY,
       },
     });
 
-    const content = (await result).data.response.content;
-    
-    
-    const article = {
-       id:content.id,
-       webPublicationDate:content.webPublicationDate,
-       webTitle:content.webTitle,
-       webUrl:content.webUrl,
-       apiUrl:content.apiUrl,
-  fields:{
-    headline:content.fields?.headline,
-    trailText:content.fields?.trailText,
-    body:content.fields?.body,
-    thumbnail:content.fields?.thumbnail,
-        }
+    const content = result.data.response.content;
 
-      }
-    
-
-      return res.status(200).json({
-        success:true,
-        article,
-      });
-
-    
-
-  }
-  catch(error){
-
+    return res.status(200).json({
+      success: true,
+      article: content,
+    });
+  } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: "Failed to fetch Guardian article",
     });
-
   }
 }

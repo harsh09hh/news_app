@@ -121,3 +121,38 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.article-body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.85;
+  color: #121212;
+}
+
+.article-body p {
+  margin-bottom: 1.75rem;
+}
+
+.article-body h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 3.5rem 0 1.25rem;
+}
+
+
+.article-body time,
+.article-body .block-time,
+.article-body .inline-time {
+  display: none;
+}
+
+.article-body figure {
+  margin: 3rem 0;
+}
+
+.article-body figcaption {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.75rem;
+}

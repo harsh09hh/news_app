@@ -1,7 +1,9 @@
+import { ParticularGuardianArticle } from "@/api/v1/Guardianarticle";
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "@/types";
 import { Clock, Eye, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import type { GuardianContent } from "@/types";
 
 interface GuardianNewsCardProps {
   article: GuardianArticle;
@@ -14,8 +16,8 @@ export function GuardianNewsCars({ article }: GuardianNewsCardProps){
     const navigate =useNavigate();
 
   const handleClick =()=>{
-    navigate("/detail",
-        {state:{article:mapGuardianToArticle(article)}});
+    navigate("/guardian/politics",
+        {state:{apiUrl:article.apiUrl}});
   }
 
   return (
