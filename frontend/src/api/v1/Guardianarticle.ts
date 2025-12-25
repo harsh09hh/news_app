@@ -1,5 +1,4 @@
 
-import axios from "axios";
 import api from "./axios";
 
 import type  { GuardianResponse } from "@/types";

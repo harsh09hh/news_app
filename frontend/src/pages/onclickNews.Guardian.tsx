@@ -4,12 +4,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ParticularGuardianArticle } from "@/api/v1/Guardianarticle";
 import { analyzeArticle } from "@/api/v1/analyze";
 
-import "@/app.css"; // ✅ FIXED
+import "@/app.css";
 
 import type { GuardianContent } from "@/types";
 import type Articles from "@/types";
 
-/* ---------- MAPPER (ONLY FOR AI) ---------- */
+
 function mapGuardianToArticle(guardian: GuardianContent): Articles {
   return {
     source: {
@@ -35,7 +35,7 @@ interface AIresponse {
 }
 
 const OnclicknewsGuardian = () => {
-  const navigate = useNavigate();
+
   const { state } = useLocation();
 
   const [guardianArticle, setGuardianArticle] =
@@ -47,7 +47,7 @@ const OnclicknewsGuardian = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /* ---------- FETCH GUARDIAN ARTICLE ---------- */
+ 
   useEffect(() => {
     if (!state?.apiUrl) return;
 
@@ -70,7 +70,7 @@ const OnclicknewsGuardian = () => {
     };
   }, [state?.apiUrl]);
 
-  /* ---------- ANALYZE ARTICLE ---------- */
+
   useEffect(() => {
     if (!guardianArticle) return;
 
@@ -91,7 +91,7 @@ const OnclicknewsGuardian = () => {
     };
   }, [guardianArticle]);
 
-  /* ---------- FALLBACK STATES ---------- */
+
   if (!state?.apiUrl) {
     return <div className="p-6">No article data found.</div>;
   }
@@ -100,10 +100,10 @@ const OnclicknewsGuardian = () => {
   if (error) return <div className="p-6 text-red-600">{error}</div>;
   if (!guardianArticle) return <div className="p-6">Article not available.</div>;
 
-  /* ---------- RENDER ---------- */
   return (
     <main className="bg-white min-h-screen">
-      {/* ---------- HEADER ---------- */}
+
+
       <article className="mx-auto max-w-[720px] px-4 pt-10">
         <h1 className="font-serif text-[42px] leading-tight font-bold">
           {guardianArticle.fields?.headline}
@@ -121,7 +121,8 @@ const OnclicknewsGuardian = () => {
         </div>
       </article>
 
-      {/* ---------- FULL BLEED IMAGE ---------- */}
+  
+
       {guardianArticle.fields?.thumbnail && (
         <section className="my-12">
           <div className="w-screen relative left-1/2 right-1/2 -translate-x-1/2">
@@ -134,7 +135,8 @@ const OnclicknewsGuardian = () => {
         </section>
       )}
 
-      {/* ---------- BODY ---------- */}
+
+
       <article className="mx-auto max-w-[720px] px-4 pb-24">
         <div
           className="article-body"
@@ -143,7 +145,8 @@ const OnclicknewsGuardian = () => {
           }}
         />
 
-        {/* ---------- AI ANALYSIS ---------- */}
+
+
         <section className="mt-16 border-t pt-8">
           <h2 className="text-xl font-semibold mb-4">AI Analysis</h2>
 

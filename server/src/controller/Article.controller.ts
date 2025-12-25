@@ -1,57 +1,7 @@
 import { Response,Request,NextFunction } from "express";
 import axios from "axios";
 
-interface GuardianFields{
-   
-    headline?:string,
-    thumbnail?:string,
-    trailText?:string,
-  
-}
-
-interface GuardianArticle{
-  id:string,
-  webPublicationDate:string,
-  webTitle:string,
-  webUrl:string,
-  apiUrl:string,
-  fields?:GuardianFields
-
-}
-interface GuardianApiResponse {
-  response: {
-    status: string;
-    total: number;
-    currentPage: number;
-    pages: number;
-    results: GuardianArticle[];
-  };
-}
-
-
-interface GuardianContent {
-  id:string,
-  webPublicationDate:string,
-  webTitle:string,
-  webUrl:string,
-  apiUrl:string,
-  fields:{
-    headline?:string,
-    trailText?:string,
-    body?:string,
-    thumbnail?:string,
-  }
-
-}
-
-interface GuardianSingleResponse {
-   response: {
-    status: string;
-    content: GuardianContent;
-  };
-
-}
-
+import type { GuardianApiResponse,GuardianSingleResponse } from "../types";
 
 export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
 
