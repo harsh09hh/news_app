@@ -4,17 +4,19 @@ import type Articles from "../types";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
-import { GuardianPoliticsArticle } from "@/api/v1/Guardianarticle";
+import { GuardianPoliticsArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
+
+import { Key } from "lucide-react";
 
 
 const Home=()=>{
    const[globalnews ,setglobalnews]= useState<Articles[]>([]);
     const [isloading ,setisloading]=useState(false);
 
-    const[tendingnews ,settending]= useState<Articles[]>([]);
+    const[tendingnews ,settending]= useState<GuardianArticle[]>([]);
     const[politics,setpolitics]=useState<GuardianArticle[]>([]);
     const[business,setbusiness]=useState<Articles[]>([]);
     const[crypto,setcrypto]=useState<Articles[]>([]);
@@ -39,29 +41,7 @@ const Home=()=>{
 
 
 
-const loadTrendingNews=async ()=>{
 
-    try{
-        setisloading(true);
-    
-    const endpoint=`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
-
-    const response= await fetch(endpoint);
-    if(!response.ok){
-        console.log("failed to fetch terndingnews");
-    }
-
-    const data = await response.json();
-    settending(data.articles ||[]);
-    }
-    catch(error){
-        console.log("trending news",error);
-        settending([]);
-    }
-    finally{setisloading(false)};
-
-
-}
 
 
 
@@ -268,8 +248,6 @@ const loadtimesofindia=async ()=>{
 
 
 useEffect(()=>{
-    
-    loadTrendingNews();
     loadbusinessNews();
     loadcryptoNews();
     loadstocknews();
@@ -280,8 +258,14 @@ useEffect(()=>{
    loadtimesofindia();
    
 GuardianPoliticsArticle()
-    .then(({ article }) => setpolitics(article))
+    .then((res) => setpolitics(res.article))
     .catch(console.error);
+
+TrendingGuardingArticle()
+  .then((res) => settending(res.article))
+  .catch(err => console.error(err));
+
+
 
 },[])
 
@@ -314,13 +298,13 @@ GuardianPoliticsArticle()
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Trending News</h2>
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
-                {isloading ? (
-                  <p>Loading Trending News...</p>
-                ) : (
-                  tendingnews.map((article, index) => (
-                    <Newscard key={index} article={article} />
-                  ))
-                )}
+               {isloading? (
+                <p>loading trending article</p>
+               ): (
+                tendingnews.map((article, index)=>(
+                <GuardianNewsCars key={index} article={article}/>
+                ))
+               )}
               </div>
             </div>
           </section>
@@ -333,7 +317,7 @@ GuardianPoliticsArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading Trending News...</p>
+                  <p>Loading politics News...</p>
                 ) : (
                  politics.map((article, index) => (
                     <GuardianNewsCars key={index} article={article}/>

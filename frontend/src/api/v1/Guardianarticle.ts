@@ -14,7 +14,7 @@ export async function GuardianPoliticsArticle(){
     }
 
     catch(error){
-       console.error("Failed to fetch politics articles", error);
+ 
     throw new Error("Unable to load articles");
     }
 
@@ -41,7 +41,6 @@ export async function TrendingGuardingArticle(){
     return result.data;
     }
     catch(error){
-        console.log(error);
         throw new Error("failed to fetch the  trending article");
       
 

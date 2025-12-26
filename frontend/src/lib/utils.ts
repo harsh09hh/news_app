@@ -23,3 +23,8 @@ export function mapGuardianToArticle(g:GuardianArticle):Articles{
     content: g.description,
   }
 }
+
+
+
+
+

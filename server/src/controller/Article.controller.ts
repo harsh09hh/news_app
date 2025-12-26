@@ -43,7 +43,7 @@ const article =response.data.response.results.map
 
 res.status(200).json({
   success:true,
-  article,
+  article:article,
 })
 
 }
@@ -109,15 +109,17 @@ export async function  TrendingGuardingArticle(
   try{
 
  const result = await axios.get<GuardianApiResponse>(
-  'https://content.guardianapis.com/search',
+ "https://content.guardianapis.com/search",
   {
     params: {
-      q: "breaking OR trending OR latest OR major OR global",
-      "order-by": "relevance",
+      q: "world OR global OR breaking",
+      "order-by": "newest",
+      "from-date": "2025-12-24",   // dynamically generate in real code
       "show-fields": "headline,trailText,thumbnail",
       "page-size": 20,
       "api-key": process.env.GUARDIAN_API_KEY,
     },
+
   });
 
   const data = result.data.response.results.map
@@ -135,7 +137,7 @@ export async function  TrendingGuardingArticle(
 
   return res.status(200).json({
     success:true,
-    data,
+    article:data,
     
   });
 }
