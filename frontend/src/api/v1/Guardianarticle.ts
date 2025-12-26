@@ -31,3 +31,20 @@ export async function ParticularGuardianArticle(apiUrl:string){
     return result.data;
     
 }
+
+
+export async function TrendingGuardingArticle(){
+    try{
+
+    const result = await api.get('/Guardian/trending')
+    
+    return result.data;
+    }
+    catch(error){
+        console.log(error);
+        throw new Error("failed to fetch the  trending article");
+      
+
+    }
+
+}

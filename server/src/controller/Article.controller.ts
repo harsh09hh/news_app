@@ -2,6 +2,8 @@ import { Response,Request,NextFunction } from "express";
 import axios from "axios";
 
 import type { GuardianApiResponse,GuardianSingleResponse } from "../types";
+import { time } from "console";
+import { title } from "process";
 
 export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
 
@@ -94,4 +96,55 @@ export async function ParticularGuardianArticle(
       message: "Failed to fetch Guardian article",
     });
   }
+}
+
+
+
+
+export async function  TrendingGuardingArticle(
+  req:Request,res:Response,next:NextFunction
+){
+
+
+  try{
+
+ const result = await axios.get<GuardianApiResponse>(
+  'https://content.guardianapis.com/search',
+  {
+    params: {
+      q: "breaking OR trending OR latest OR major OR global",
+      "order-by": "relevance",
+      "show-fields": "headline,trailText,thumbnail",
+      "page-size": 20,
+      "api-key": process.env.GUARDIAN_API_KEY,
+    },
+  });
+
+  const data = result.data.response.results.map
+  (item=>({
+    id:item.id,
+    title:item.webTitle,
+    description: item.fields?.trailText ?? "",
+    image: item.fields?.thumbnail ?? null,
+    publishedAt:item.webPublicationDate,
+    apiUrl:item.apiUrl,
+
+  }));
+ 
+
+
+  return res.status(200).json({
+    success:true,
+    data,
+    
+  });
+}
+
+catch(error){
+  res.status(500).json({
+    success:false,
+    message:"Guardian Trending API failed"
+
+  })
+}
 }
