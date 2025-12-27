@@ -195,7 +195,100 @@ export async function  CryptoGuardingArticle(
 catch(error){
   res.status(500).json({
     success:false,
-    message:"Guardian Trending API failed"
+    message:"Guardian crypto API failed"
+
+  })
+}
+}
+
+
+export async function  businessGuardingArticle(
+  req:Request,res:Response,next:NextFunction
+){
+
+
+  try{
+
+ const result = await axios.get<GuardianApiResponse>("https://content.guardianapis.com/search", {
+  params: {
+    section: "business",
+    "order-by": "newest",
+    "show-fields": "headline,trailText,thumbnail",
+    "page-size": 20,
+    "api-key": process.env.GUARDIAN_API_KEY,
+  },
+});
+
+  const data = result.data.response.results.map
+  (item=>({
+    id:item.id,
+    title:item.webTitle,
+    description: item.fields?.trailText ?? "",
+    image: item.fields?.thumbnail ?? null,
+    publishedAt:item.webPublicationDate,
+    apiUrl:item.apiUrl,
+
+  }));
+ 
+
+
+  return res.status(200).json({
+    success:true,
+    article:data,
+    
+  });
+}
+
+catch(error){
+  res.status(500).json({
+    success:false,
+    message:"Guardian Business API failed"
+
+  })
+}
+}
+
+export async function  SportsGuardingArticle(
+  req:Request,res:Response,next:NextFunction
+){
+
+
+  try{
+
+ const result = await axios.get<GuardianApiResponse>("https://content.guardianapis.com/search", {
+  params: {
+    section: "sport",
+    "order-by": "newest",
+    "show-fields": "headline,trailText,thumbnail",
+    "page-size": 20,
+    "api-key": process.env.GUARDIAN_API_KEY,
+  },
+});
+
+  const data = result.data.response.results.map
+  (item=>({
+    id:item.id,
+    title:item.webTitle,
+    description: item.fields?.trailText ?? "",
+    image: item.fields?.thumbnail ?? null,
+    publishedAt:item.webPublicationDate,
+    apiUrl:item.apiUrl,
+
+  }));
+ 
+
+
+  return res.status(200).json({
+    success:true,
+    article:data,
+    
+  });
+}
+
+catch(error){
+  res.status(500).json({
+    success:false,
+    message:"Guardian sports API failed"
 
   })
 }
