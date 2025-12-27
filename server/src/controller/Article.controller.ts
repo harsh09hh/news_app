@@ -2,8 +2,6 @@ import { Response,Request,NextFunction } from "express";
 import axios from "axios";
 
 import type { GuardianApiResponse,GuardianSingleResponse } from "../types";
-import { time } from "console";
-import { title } from "process";
 
 export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
 
@@ -114,13 +112,65 @@ export async function  TrendingGuardingArticle(
     params: {
       q: "world OR global OR breaking",
       "order-by": "newest",
-      "from-date": "2025-12-24",   // dynamically generate in real code
+      "from-date": "2025-12-24",   
       "show-fields": "headline,trailText,thumbnail",
       "page-size": 20,
       "api-key": process.env.GUARDIAN_API_KEY,
     },
 
   });
+
+  const data = result.data.response.results.map
+  (item=>({
+    id:item.id,
+    title:item.webTitle,
+    description: item.fields?.trailText ?? "",
+    image: item.fields?.thumbnail ?? null,
+    publishedAt:item.webPublicationDate,
+    apiUrl:item.apiUrl,
+
+  }));
+ 
+
+
+  return res.status(200).json({
+    success:true,
+    article:data,
+    
+  });
+}
+
+catch(error){
+  res.status(500).json({
+    success:false,
+    message:"Guardian Trending API failed"
+
+  })
+}
+}
+
+
+export async function  CryptoGuardingArticle(
+  req:Request,res:Response,next:NextFunction
+){
+
+
+  try{
+
+ const result = await axios.get<GuardianApiResponse>(
+  "https://content.guardianapis.com/search",
+  {
+    params: {
+      q: "crypto OR cryptocurrency OR bitcoin OR ethereum",
+      "order-by": "newest",
+      "from-date": "2025-12-24",
+      "show-fields": "headline,trailText,thumbnail",
+      "page-size": 20,
+      "api-key": process.env.GUARDIAN_API_KEY,
+    },
+  }
+);
+
 
   const data = result.data.response.results.map
   (item=>({

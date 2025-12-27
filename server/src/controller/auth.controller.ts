@@ -12,8 +12,6 @@ import { JWT_REFRESH_SECRET } from "../config/env";
 
 
 
-
-
 interface CustomError extends Error{
 
     statusCode?:number;
