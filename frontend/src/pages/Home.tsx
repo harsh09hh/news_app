@@ -4,12 +4,10 @@ import type Articles from "../types";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
-import { businessGuardingArticle, GuardianPoliticsArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
+import { businessGuardingArticle, cryptoGuardingArticle, GuardianPoliticsArticle, sportGuardingArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
-
-import { Key } from "lucide-react";
 
 
 const Home=()=>{
@@ -19,14 +17,14 @@ const Home=()=>{
     const[tendingnews ,settending]= useState<GuardianArticle[]>([]);
     const[politics,setpolitics]=useState<GuardianArticle[]>([]);
     const[business,setbusiness]=useState<GuardianArticle[]>([]);
-    const[crypto,setcrypto]=useState<Articles[]>([]);
+    const[crypto,setcrypto]=useState<GuardianArticle[]>([]);
     const[stock,setstock]=useState<Articles[]>([]);
     const[washingtonpost ,setwashingtonpost] =useState<Articles[]>([]);
     const[wallstreet ,setwallstreet] =useState<Articles[]>([]);
     const[thehindu ,setthehindu]=useState<Articles[]>([]);
     const[nbc ,setnbc]=useState<Articles[]>([]);
-     const[timesofindia ,settimesofindia]=useState<Articles[]>([]);
-   
+    const[timesofindia ,settimesofindia]=useState<Articles[]>([]);
+    
 
 
     const API_KEY =import.meta.env.VITE_PUBLIC_NEWS_API;
@@ -35,42 +33,6 @@ const Home=()=>{
     
 
 
-
-  
-
-
-
-
-
-
-
-
-
-
-
-const loadcryptoNews=async ()=>{
-
-    try{
-        setisloading(true);
-    
-    const endpoint=`https://newsapi.org/v2/everything?q=cryptocurrency+bitcoin+ethereum&sortBy=publishedAt&language=en&pageSize=20&apiKey=${API_KEY}`
-
-    const response= await fetch(endpoint);
-    if(!response.ok){
-        console.log("failed to fetch terndingnews");
-    }
-
-    const data = await response.json();
-    setcrypto(data.articles ||[]);
-    }
-    catch(error){
-        console.log("trending news",error);
-        setcrypto([]);
-    }
-    finally{setisloading(false)};
-
-
-}
 
 
 const loadwashingtonpost =async()=>{
@@ -82,7 +44,7 @@ const loadwashingtonpost =async()=>{
   const response =await fetch(endpoint);
 
   if(!response.ok){
-    console.log("could not load the article for washintton post");
+    console.log("could not load the article for washinton post");
   }
   const data =await response.json();
   setwashingtonpost(data.articles ||[]);
@@ -226,8 +188,6 @@ const loadtimesofindia=async ()=>{
 
 
 useEffect(()=>{
-    loadcryptoNews();
-    loadstocknews();
     loadwashingtonpost();
    loadwallstreetjournal();
    loadnbs();
@@ -246,6 +206,8 @@ TrendingGuardingArticle()
   businessGuardingArticle().then((res) => setbusiness(res.article))
   .catch(err => console.error(err));
 
+  cryptoGuardingArticle().then((res) => setcrypto(res.article))
+  .catch(err => console.error(err));
 
 
 },[])
@@ -334,7 +296,7 @@ TrendingGuardingArticle()
                   <p>Loading Trending News...</p>
                 ) : (
                   crypto.map((article, index) => (
-                    <Newscard key={index} article={article} />
+                    <GuardianNewsCars key={index} article={article} />
                   ))
                 )}
               </div>
@@ -344,20 +306,20 @@ TrendingGuardingArticle()
 
 
 
-            <section>
+            {/* <section>
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Stocks</h2>
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
                   <p>Loading Trending News...</p>
                 ) : (
-                  crypto.map((article, index) => (
-                    <Newscard key={index} article={article} />
+                   crypto.map((article, index) => (
+                    <GuardianNewsCars key={index} article={article} />
                   ))
                 )}
               </div>
             </div>
-          </section>
+          </section> */}
 
 
 

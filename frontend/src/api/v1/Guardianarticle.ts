@@ -76,3 +76,18 @@ export async function businessGuardingArticle(){
 
 }
 
+export async function cryptoGuardingArticle(){
+    try{
+
+    const result = await api.get<GuardianResponse>('/Guardian/crypto')
+    
+    return result.data;
+    }
+    catch(error){
+        throw new Error("failed to fetch the  trending article");
+      
+
+    }
+
+}
+
