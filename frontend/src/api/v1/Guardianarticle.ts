@@ -36,7 +36,7 @@ export async function ParticularGuardianArticle(apiUrl:string){
 export async function TrendingGuardingArticle(){
     try{
 
-    const result = await api.get('/Guardian/trending')
+    const result = await api.get<GuardianResponse>('/Guardian/trending')
     
     return result.data;
     }
@@ -47,3 +47,32 @@ export async function TrendingGuardingArticle(){
     }
 
 }
+export async function sportGuardingArticle(){
+    try{
+
+    const result = await api.get<GuardianResponse>('/Guardian/sports')
+    
+    return result.data;
+    }
+    catch(error){
+        throw new Error("failed to fetch the  trending article");
+      
+
+    }
+
+}
+export async function businessGuardingArticle(){
+    try{
+
+    const result = await api.get<GuardianResponse>('/Guardian/business')
+    
+    return result.data;
+    }
+    catch(error){
+        throw new Error("failed to fetch the  trending article");
+      
+
+    }
+
+}
+

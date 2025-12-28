@@ -4,7 +4,7 @@ import type Articles from "../types";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
-import { GuardianPoliticsArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
+import { businessGuardingArticle, GuardianPoliticsArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
@@ -18,7 +18,7 @@ const Home=()=>{
 
     const[tendingnews ,settending]= useState<GuardianArticle[]>([]);
     const[politics,setpolitics]=useState<GuardianArticle[]>([]);
-    const[business,setbusiness]=useState<Articles[]>([]);
+    const[business,setbusiness]=useState<GuardianArticle[]>([]);
     const[crypto,setcrypto]=useState<Articles[]>([]);
     const[stock,setstock]=useState<Articles[]>([]);
     const[washingtonpost ,setwashingtonpost] =useState<Articles[]>([]);
@@ -47,29 +47,7 @@ const Home=()=>{
 
 
 
-const loadbusinessNews=async ()=>{
 
-    try{
-        setisloading(true);
-    
-    const endpoint=`https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${API_KEY}`
-
-    const response= await fetch(endpoint);
-    if(!response.ok){
-        console.log("failed to fetch terndingnews");
-    }
-
-    const data = await response.json();
-    setbusiness(data.articles ||[]);
-    }
-    catch(error){
-        console.log("trending news",error);
-        setbusiness([]);
-    }
-    finally{setisloading(false)};
-
-
-}
 const loadcryptoNews=async ()=>{
 
     try{
@@ -248,7 +226,6 @@ const loadtimesofindia=async ()=>{
 
 
 useEffect(()=>{
-    loadbusinessNews();
     loadcryptoNews();
     loadstocknews();
     loadwashingtonpost();
@@ -263,6 +240,10 @@ GuardianPoliticsArticle()
 
 TrendingGuardingArticle()
   .then((res) => settending(res.article))
+  .catch(err => console.error(err));
+
+
+  businessGuardingArticle().then((res) => setbusiness(res.article))
   .catch(err => console.error(err));
 
 
@@ -337,7 +318,7 @@ TrendingGuardingArticle()
                   <p>Loading Trending News...</p>
                 ) : (
                   business.map((article, index) => (
-                    <Newscard key={index} article={article} />
+                    <GuardianNewsCars key={index} article={article} />
                   ))
                 )}
               </div>
