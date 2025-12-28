@@ -220,8 +220,9 @@ TrendingGuardingArticle()
       <SidebarProvider>
         
         <div className="w-[250px] h-screen fixed top-0 left-0 border-r z-50 bg-white">
-          <AppSidebar />
-        </div>
+      <AppSidebar />
+</div>
+
 
        
         <div className="ml-[250px] h-screen overflow-y-auto w-full p-6 space-y-10">
