@@ -44,15 +44,15 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       className={cn(
-        "flex min-h-screen items-center justify-center", // center on screen
+        "flex min-h-screen items-center justify-center", 
         className
       )}
       {...props}
     >
-      <div className="w-full max-w-md space-y-6 px-6"> {/* card width */}
+      <div className="w-full max-w-md space-y-6 px-6">
         <form className="space-y-6" onSubmit={handleSubmit}>
           <FieldGroup>
-            {/* Header */}
+            
             <div className="flex flex-col items-center gap-2 text-center">
               <a
                 href="#"
