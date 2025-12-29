@@ -2,27 +2,43 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_ACCESS_SECRET } from "../config/env";
-import { JwtPayload } from "../utils/tokens";
 
-interface AuthedRequest extends Request {
+export interface AuthedRequest extends Request {
   userId?: string;
 }
 
-export const requireAuth = (req: AuthedRequest, res: Response, next: NextFunction) => {
-  try {
-    const token = req.cookies?.accessToken;
-    if (!token) {
-      return res.status(401).json({ success: false, message: "Not authenticated" });
+
+export async function verifyToken(req:AuthedRequest,res:Response,next:NextFunction){
+
+  try{
+   const token = req.cookies?.accessToken;
+
+
+    if(!token){
+      res.status(401).json({
+        message:"not authenticated"
+      });  
     }
-
-    const decoded = jwt.verify(
-      token,
-      JWT_ACCESS_SECRET
-    ) 
-    req.userId = decoded.userId;
-    next();
-
-  } catch (error) {
-    return res.status(401).json({ success: false, message: "Invalid or expired token" });
-  }
+    const secret= JWT_ACCESS_SECRET;
+    if(!secret){
+      console.error("JWT_ACCESS_SECRET missing");
+      return res.status(500).json({ message: "Server misconfiguration" });
+    
+    }
+    const decoded= jwt.verify(token,secret)as {
+      userId: string;
+      role: string;
 };
+    
+   req.userId=decoded.userId;
+   return next();
+
+  }
+  catch(err){
+   return res.status(401).json({ message: "Invalid token" });
+  }
+
+
+
+
+}

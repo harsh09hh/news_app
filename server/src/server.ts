@@ -12,6 +12,8 @@ import errorMiddelware from './middelware/error.middleware';
 import userRoutes from './Routes/user.routes';
 import cors from "cors"
 import cookieParser from 'cookie-parser';
+import ProtectedRoute from './Routes/protected.routes';
+import { verifyToken } from './middelware/auth.middleware';
 const app =express();
 app.use(express.json());
 app.use(cookieParser());
@@ -31,6 +33,7 @@ app.use('/api/v1/auth',authRouter);
 app.use('/api/v1/analyze',Summary);
 app.use('/api/v1/users',userRoutes);
 app.use('/api/v1/Guardian',GuardianArticle);
+app.use('/api/v1',verifyToken,ProtectedRoute)
 
 app.use(errorMiddelware);
 

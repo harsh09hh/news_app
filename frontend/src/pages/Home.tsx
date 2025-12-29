@@ -13,6 +13,7 @@ import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
 const Home=()=>{
    const[globalnews ,setglobalnews]= useState<Articles[]>([]);
     const [isloading ,setisloading]=useState(false);
+    const[lodingsection ,setlodingsection]= useState({});
 
     const[tendingnews ,settending]= useState<GuardianArticle[]>([]);
     const[politics,setpolitics]=useState<GuardianArticle[]>([]);
@@ -232,7 +233,7 @@ TrendingGuardingArticle()
         <div className="ml-[250px] h-screen overflow-y-auto w-full p-6 space-y-10">
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Welcome to NewsHub</h1>
+            <h1 className="text-3xl font-bold text-gray-900">The Daily Draft</h1>
             <p className="text-sm text-gray-500 mt-4">
               Stay informed with the latest news around the world
             </p>

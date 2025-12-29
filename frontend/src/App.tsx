@@ -16,7 +16,7 @@ function App() {
      <Router>
       <Routes>
         <Route element={<ProtectedRoute/>}> 
-      <Route path='/dashboard' element={<Home/>}  />
+      <Route path='/' element={<Home/>}  />
       <Route path='/detail' element={<OnclickNews/>}/>
       <Route path='/local' element={<Localnewspage/>}/>
       <Route path='/:category' element={<Differentcatigory/>}/>

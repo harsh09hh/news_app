@@ -35,7 +35,7 @@ export function SignUpForm({ className, ...props }: React.ComponentProps<"div">)
     try{
          await signUp(name,email,password);
 
-    navigate('/dashboard');
+    navigate('/');
     }
 
     catch(error:any){

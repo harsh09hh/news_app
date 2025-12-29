@@ -36,7 +36,7 @@ export function AppSidebar() {
             <div className="flex items-center justify-between text-xl font-bold w-full">
             <div  className="flex items-center gap-2">
             <Newspaper className=" text-blue-500"/>
-            <a href="/dashboard">
+            <a href="/">
               <span>The Daily Draft</span>
               </a>
               </div>

@@ -28,7 +28,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
 
     try{
       await singIN(email ,password);
-      navigate('/dashboard');
+      navigate('/');
     
     }
      catch (error: any) {
