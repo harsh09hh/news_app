@@ -188,6 +188,8 @@ const loadtimesofindia=async ()=>{
 
 
 useEffect(()=>{
+
+  const fetchall=()=>{
     loadwashingtonpost();
    loadwallstreetjournal();
    loadnbs();
@@ -208,6 +210,8 @@ TrendingGuardingArticle()
 
   cryptoGuardingArticle().then((res) => setcrypto(res.article))
   .catch(err => console.error(err));
+  }
+  fetchall();
 
 
 },[])
