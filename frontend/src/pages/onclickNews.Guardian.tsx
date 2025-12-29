@@ -44,8 +44,10 @@ const OnclicknewsGuardian = () => {
   const [aiData, setAiData] = useState<AIresponse | null>(null);
   const [aiUnavailable, setAiUnavailable] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const [articleLoading, setArticleLoading] = useState(false);
+const [aiLoading, setAiLoading] = useState(false);
+
+const [error, setError] = useState<string | null>(null);
 
  
   useEffect(() => {
@@ -55,13 +57,33 @@ const OnclicknewsGuardian = () => {
 
     (async () => {
       try {
-        setIsLoading(true);
-        const res = await ParticularGuardianArticle(state.apiUrl);
-        if (!cancelled) setGuardianArticle(res.article);
+        setArticleLoading(true)
+        setAiLoading(true)
+
+        const res =  ParticularGuardianArticle(state.apiUrl);
+        const aiPromise =res.then(res=>
+          analyzeArticle(mapGuardianToArticle(res.article)));
+
+        const articleRes =await res;
+        if (!cancelled) setGuardianArticle(articleRes.article);
+        if (!cancelled) setArticleLoading(false);
+
+
+        try {
+        const aiRes = await aiPromise;
+        if (!cancelled) setAiData(aiRes);
       } catch {
-        if (!cancelled) setError("Failed to load article");
+        if (!cancelled) setAiUnavailable(true);
       } finally {
-        if (!cancelled) setIsLoading(false);
+          if (!cancelled) setAiLoading(false);
+        }
+
+
+
+      }catch {
+        if (!cancelled) setError("Failed to load article");
+        setArticleLoading(false);
+        setAiLoading(false);
       }
     })();
 
@@ -71,32 +93,39 @@ const OnclicknewsGuardian = () => {
   }, [state?.apiUrl]);
 
 
-  useEffect(() => {
-    if (!guardianArticle) return;
-
-    let cancelled = false;
-    const articleForAI = mapGuardianToArticle(guardianArticle);
-
-    (async () => {
-      try {
-        const data = await analyzeArticle(articleForAI);
-        if (!cancelled) setAiData(data);
-      } catch {
-        if (!cancelled) setAiUnavailable(true);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [guardianArticle]);
 
 
   if (!state?.apiUrl) {
     return <div className="p-6">No article data found.</div>;
   }
 
-  if (isLoading) return <div className="p-6">Loading article…</div>;
+  if (articleLoading)
+   return (
+    <main className="bg-white min-h-screen animate-pulse">
+      <div className="mx-auto max-w-[720px] px-4 pt-10">
+        
+     
+        <div className="h-10 bg-gray-200 rounded w-3/4 mb-4"></div>
+        <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+
+       
+        <div className="mt-6 h-4 bg-gray-300 rounded w-1/3"></div>
+      </div>
+
+      <section className="my-10">
+        <div className="w-screen h-[400px] bg-gray-200" />
+      </section>
+
+    
+      <div className="mx-auto max-w-[720px] px-4 space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-full"></div>
+        <div className="h-4 bg-gray-200 rounded w-11/12"></div>
+        <div className="h-4 bg-gray-200 rounded w-10/12"></div>
+        <div className="h-4 bg-gray-200 rounded w-9/12"></div>
+        <div className="h-4 bg-gray-200 rounded w-full"></div>
+      </div>
+    </main>
+  );
   if (error) return <div className="p-6 text-red-600">{error}</div>;
   if (!guardianArticle) return <div className="p-6">Article not available.</div>;
 
@@ -129,6 +158,9 @@ const OnclicknewsGuardian = () => {
             <img
               src={guardianArticle.fields.thumbnail}
               alt={guardianArticle.webTitle}
+              loading="lazy"
+               decoding="async"
+
               className="w-full max-h-[650px] object-cover"
             />
           </div>
