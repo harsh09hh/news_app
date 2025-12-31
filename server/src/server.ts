@@ -14,6 +14,7 @@ import cors from "cors"
 import cookieParser from 'cookie-parser';
 import ProtectedRoute from './Routes/protected.routes';
 import { verifyToken } from './middelware/auth.middleware';
+import connectToRedis from './database/cashing';
 const app =express();
 app.use(express.json());
 app.use(cookieParser());
@@ -42,4 +43,5 @@ app.listen(PORT,async()=>{
     console.log(` Server running on http://localhost:${PORT}`)
 
    await connectionToDatabase();    // as soon as the app starts listening  the connection to the database will be established 
+   await connectToRedis();
 })
