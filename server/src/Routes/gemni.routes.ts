@@ -3,59 +3,91 @@ import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import dotenv from 'dotenv';
 import { Router } from "express";
+import axios from "axios";
 
 const Summary =Router();
 
 
 dotenv.config();
 
-const googleAi =createGoogleGenerativeAI({
-    apiKey:process.env.GOOGLE_API_KEY!,
-})
-
 
 Summary.post('/',async(req,res)=>{
 
-    try{
 
-        const article = req.body;
+      try{
+        const {article}= req.body;
+        const model = "meta-llama/Meta-Llama-3-8B-Instruct";
+        const response = await axios.post<any>(
+        "https://router.huggingface.co/v1/chat/completions",
+        {
+          model: "meta-llama/Llama-3.2-3B-Instruct",
+            messages: [
+            {
+                role: "user",
+                content: `
+                You are an AI journalism analysis assistant.
 
-        const {text}=await  generateText({
-                    model:googleAi('gemini-2.0-flash-001',),
-                   prompt: 
-                   `Please respond with **only** a valid JSON object—no markdown, no back‑ticks, no extra text and specialy no  backticks or markdown-style code fencing.
-        
-        Article Details:
-        id: ${article.source?.id || ""}
-        name: ${article.source?.name || ""}
-        author: ${article.author || ""}
-        title: ${article.title || ""}
-        description: ${article.description || ""}
-        content: ${article.content || ""}
-        
-        Output schema:
-        - ai_summary: array of summary strings
-        - leaning: array with one of [Far Left, Left Leaning, Neutral, Right Leaning, Far Right]
-        - source_Reliability: array with one of [Highly Reliable, Generally Reliable, Mixed Reliability, Unreliable]
-        - ai_key_points: array of key point strings
-        - ai_Sentiment: array with one of [positive, neutral, negative]
-        
-        Do not include anything else—just the JSON.`,
-        });
-        
-        const cleanText = text.trim().replace(/```json|```/g, '').trim();
+                Return ONLY a valid JSON object. 
+                NO markdown. NO code fence. NO explanations. Only JSON.
 
-        const result = JSON.parse(cleanText);
-            
-        res.send(result);
+                Analyze the article and PRODUCE REAL VALUES — do NOT return empty arrays, example text, or schemas.
 
-    }
+                Return the JSON in EXACT format:
 
-    catch(error){
-     console.error("Route error:", error);
-    return res.status(500).json({ error: "chatbot connection failed" });
+                {
+                "ai_summary": [
+                    "2-3 bullet points summarizing the article clearly in plain English"
+                ],
+                "leaning": [
+                    "Far Left" | "Left Leaning" | "Neutral" | "Right Leaning" | "Far Right"
+                ],
+                "source_Reliability": [
+                    "Highly Reliable" | "Generally Reliable" | "Mixed Reliability" | "Unreliable"
+                ],
+                "ai_key_points": [
+                    "short key facts extracted from the article"
+                ],
+                "ai_Sentiment": [
+                    "positive" | "neutral" | "negative"
+                ]
+                }
 
-    }
+                Article:
+                id: ${article.source?.id || ""}
+                source: ${article.source?.name || ""}
+                author: ${article.author || ""}
+                title: ${article.title || ""}
+                description: ${article.description || ""}
+                content: ${article.content || ""}
+                `
+            }
+            ]
+
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.HF_API_KEY}`,
+          }
+        }
+      );
+    //   return res.json(response.data);
+    const content = response.data.choices?.[0]?.message?.content;
+
+try {
+  const parsed = JSON.parse(content);
+  return res.json(parsed);
+} catch {
+  return res.json({ raw: content });
+}
+  }
+  catch(err:any){
+    console.error("HF Error:", err?.response?.data || err.message);
+  return res.status(500).json({
+    error: "HuggingFace request failed",
+    details: err?.response?.data || err.message
+  });
+  }
+
 })
 
 export default Summary;

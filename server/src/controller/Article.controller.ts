@@ -2,11 +2,19 @@ import { Response,Request,NextFunction } from "express";
 import axios from "axios";
 
 import type { GuardianApiResponse,GuardianSingleResponse } from "../types";
+import {connectToRedis, redis} from "../database/cashing";
 
 export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
 
 
     try{
+
+      const cashed =await redis.get("guardian:politics");
+      if(cashed){
+        res.status(200).json(
+          JSON.parse(cashed)
+        )
+      };
 
 
     const response =await axios.get<GuardianApiResponse>('https://content.guardianapis.com/search',
@@ -36,6 +44,9 @@ const article =response.data.response.results.map
 
   }
 ));
+await redis.set("guardian:politics",JSON.stringify(article),{
+  EX:180
+})
 
 
 

@@ -1,20 +1,12 @@
-import { createClient } from "redis";
+import { createClient, RedisClientType } from "redis";
 
-const connectToRedis=async()=>{
+export const redis: RedisClientType = createClient();
 
+redis.on("error", (err) => console.error("Redis Error:", err));
 
-    try{
-
-    const redis =createClient();
-
+export async function connectToRedis() {
+  if (!redis.isOpen) {
     await redis.connect();
-    console.log("connected to redis");
-    } 
-    catch(err){
-
-        console.error("redis error",err);
-    }
+    console.log("Connected to Redis");
+  }
 }
-
-
-export default connectToRedis;
