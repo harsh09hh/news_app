@@ -183,10 +183,26 @@ const [error, setError] = useState<string | null>(null);
           <h2 className="text-xl font-semibold mb-4">AI Analysis</h2>
 
           {aiData ? (
-            <div className="space-y-2">
-              <p><b>Leaning:</b> {aiData.leaning.join(", ")}</p>
-              <p><b>Sentiment:</b> {aiData.ai_Sentiment.join(", ")}</p>
-            </div>
+            <div className="mt-8 p-6 bg-gray-100 rounded-xl space-y-4 shadow-inner">
+          <h2 className="text-2xl font-semibold text-gray-800">AI Analysis</h2>
+          <p><strong>Leaning:</strong> {aiData.leaning.join(", ")}</p>
+          <p><strong>Reliability:</strong> {aiData.source_Reliability.join(", ")}</p>
+          <p><strong>Sentiment:</strong> {aiData.ai_Sentiment.join(", ")}</p>
+
+          <div>
+            <h3 className="font-semibold">AI Summary:</h3>
+            <ul className="list-disc list-inside text-gray-700 space-y-1">
+              {aiData.ai_summary.map((s, i) => <li key={i}>{s}</li>)}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">Key Points:</h3>
+            <ul className="list-disc list-inside text-gray-700 space-y-1">
+              {aiData.ai_key_points.map((k, i) => <li key={i}>{k}</li>)}
+            </ul>
+          </div>
+        </div>
           ) : aiUnavailable ? (
             <p className="text-gray-500 italic">
               AI analysis is not available for this article.

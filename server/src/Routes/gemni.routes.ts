@@ -5,6 +5,10 @@ import dotenv from 'dotenv';
 import { Router } from "express";
 import axios from "axios";
 
+
+
+
+
 const Summary =Router();
 
 
@@ -15,8 +19,12 @@ Summary.post('/',async(req,res)=>{
 
 
       try{
-        const {article}= req.body;
-        const model = "meta-llama/Meta-Llama-3-8B-Instruct";
+        const article = req.body.article ?? req.body;
+        if (!article) {
+        return res.status(400).json({
+          error: "No article provided in request body"
+        });
+        }
         const response = await axios.post<any>(
         "https://router.huggingface.co/v1/chat/completions",
         {
@@ -70,15 +78,41 @@ Summary.post('/',async(req,res)=>{
           }
         }
       );
-    //   return res.json(response.data);
-    const content = response.data.choices?.[0]?.message?.content;
 
-try {
-  const parsed = JSON.parse(content);
-  return res.json(parsed);
-} catch {
-  return res.json({ raw: content });
-}
+
+        const choice = response.data?.choices?.[0];
+
+        if (!choice) {
+          return res.status(500).json({ error: "No choices from model", raw: response.data });
+        }
+
+        let content = "";
+
+        if (Array.isArray(choice?.message?.content)) {
+          content = choice.message.content
+            .map((c: any) => c.text || c.content || "")
+            .join("");
+        } else {
+          content = choice?.message?.content || "";
+        }
+
+        if (!content) {
+          return res.status(500).json({ error: "Model returned empty content", raw: response.data });
+        }
+
+        try {
+          return res.json(JSON.parse(content));
+        } catch (e) {
+          console.log("JSON parse failed, returning raw output");
+          return res.json({
+            ai_summary: [],
+            leaning: [],
+            source_Reliability: [],
+            ai_key_points: [],
+            ai_Sentiment: [],
+            raw: content
+          });
+        }
   }
   catch(err:any){
     console.error("HF Error:", err?.response?.data || err.message);
