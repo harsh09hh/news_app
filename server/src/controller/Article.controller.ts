@@ -9,13 +9,6 @@ export async function GuardianPolitics(req:Request,res:Response,next:NextFunctio
 
     try{
 
-      const cashed =await redis.get("guardian:politics");
-      if(cashed){
-        res.status(200).json(
-          JSON.parse(cashed)
-        )
-      };
-
 
     const response =await axios.get<GuardianApiResponse>('https://content.guardianapis.com/search',
 

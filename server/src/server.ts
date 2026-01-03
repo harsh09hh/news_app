@@ -77,5 +77,6 @@ app.listen(PORT,async()=>{
     console.log(` Server running on http://localhost:${PORT}`)
 
    await connectionToDatabase();    // as soon as the app starts listening  the connection to the database will be established 
-
+   await connectToRedis()
+  
 })
