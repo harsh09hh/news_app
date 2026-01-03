@@ -13,7 +13,7 @@ async function getOrSetCache<T>(
     }
 
 
-    const getData = fetchFn();
+    const getData = await fetchFn();
     await redis.set(key,JSON.stringify(getData),{ EX: ttlSeconds });
     console.log("save result to cache");
     return getData

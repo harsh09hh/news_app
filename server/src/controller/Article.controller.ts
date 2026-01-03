@@ -1,65 +1,52 @@
 import { Response,Request,NextFunction } from "express";
 import axios from "axios";
-
 import type { GuardianApiResponse,GuardianSingleResponse } from "../types";
 import {connectToRedis, redis} from "../database/cashing";
+import getOrSetCache from "../utils/getCache";
 
-export async function GuardianPolitics(req:Request,res:Response,next:NextFunction){
+export async function GuardianPolitics(req:Request,res:Response) {
+  try {
+    const articles = await getOrSetCache(
+      "guardian:politics",
+      180,
+      async () => {
+        const response = await axios.get<GuardianApiResponse>(
+          "https://content.guardianapis.com/search",
+          {
+            params: {
+              section: "politics",
+              "order-by": "newest",
+              "show-fields": "headline,trailText,thumbnail",
+              "page-size": 20,
+              "api-key": process.env.GUARDIAN_API_KEY,
+            },
+          }
+        );
 
-
-    try{
-
-
-    const response =await axios.get<GuardianApiResponse>('https://content.guardianapis.com/search',
-
-    {
-        params:{
-          section: "politics",
-          "order-by": "newest",
-          "show-fields": "headline,trailText,thumbnail",
-          "page-size": 20,
-          "api-key": process.env.GUARDIAN_API_KEY, 
-            
-        }
-    }
+        return response.data.response.results.map((item) => ({
+          id: item.id,
+          title: item.fields?.headline ?? item.webTitle,
+          description: item.fields?.trailText ?? "",
+          image: item.fields?.thumbnail ?? null,
+          publishedAt: item.webPublicationDate,
+          apiUrl: item.apiUrl,
+        }));
+      }
     );
 
- 
-const article =response.data.response.results.map
+    return res.status(200).json({
+      success: true,
+      article: articles,
+    });
 
-  (item=>({
-    id:item.id,
-    title:item.fields?.headline ?? item.webTitle,
-    description: item.fields?.trailText ?? "",
-    image: item.fields?.thumbnail ?? null,
-    publishedAt:item.webPublicationDate,
-    apiUrl:item.apiUrl,
-
-  }
-));
-await redis.set("guardian:politics",JSON.stringify(article),{
-  EX:180
-})
-
-
-
-res.status(200).json({
-  success:true,
-  article:article,
-})
-
-}
-catch (error) {
-    
-      return res.status(400).json({
-
-        success:false,
-        message:"Guardian API error",
-      });
-
-
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Guardian politics failed",
+    });
   }
 }
+
 
 
 export async function ParticularGuardianArticle(
@@ -109,6 +96,10 @@ export async function  TrendingGuardingArticle(
 
 
   try{
+  const articles= await getOrSetCache("guardian:trending",180,async()=>{
+
+
+  
 
  const result = await axios.get<GuardianApiResponse>(
  "https://content.guardianapis.com/search",
@@ -124,7 +115,9 @@ export async function  TrendingGuardingArticle(
 
   });
 
-  const data = result.data.response.results.map
+
+
+  return result.data.response.results.map
   (item=>({
     id:item.id,
     title:item.webTitle,
@@ -135,11 +128,12 @@ export async function  TrendingGuardingArticle(
 
   }));
  
+  });
 
 
   return res.status(200).json({
     success:true,
-    article:data,
+    article:articles,
     
   });
 }
