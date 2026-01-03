@@ -154,6 +154,7 @@ export async function  CryptoGuardingArticle(
 
 
   try{
+    const articles= await getOrSetCache("guardian:crypto",180,async()=>{
 
  const result = await axios.get<GuardianApiResponse>(
   "https://content.guardianapis.com/search",
@@ -170,7 +171,7 @@ export async function  CryptoGuardingArticle(
 );
 
 
-  const data = result.data.response.results.map
+  return result.data.response.results.map
   (item=>({
     id:item.id,
     title:item.webTitle,
@@ -180,12 +181,13 @@ export async function  CryptoGuardingArticle(
     apiUrl:item.apiUrl,
 
   }));
+});
  
 
 
   return res.status(200).json({
     success:true,
-    article:data,
+    article:articles,
     
   });
 }
@@ -206,6 +208,7 @@ export async function  businessGuardingArticle(
 
 
   try{
+    const articles= await getOrSetCache("guardian:business",180,async()=>{
 
  const result = await axios.get<GuardianApiResponse>("https://content.guardianapis.com/search", {
   params: {
@@ -217,7 +220,7 @@ export async function  businessGuardingArticle(
   },
 });
 
-  const data = result.data.response.results.map
+  return result.data.response.results.map
   (item=>({
     id:item.id,
     title:item.webTitle,
@@ -227,12 +230,13 @@ export async function  businessGuardingArticle(
     apiUrl:item.apiUrl,
 
   }));
+});
  
 
 
   return res.status(200).json({
     success:true,
-    article:data,
+    article:articles,
     
   });
 }
@@ -252,6 +256,7 @@ export async function  SportsGuardingArticle(
 
 
   try{
+    const articles= await getOrSetCache("guardian:sports",180,async()=>{
 
  const result = await axios.get<GuardianApiResponse>("https://content.guardianapis.com/search", {
   params: {
@@ -263,7 +268,7 @@ export async function  SportsGuardingArticle(
   },
 });
 
-  const data = result.data.response.results.map
+  return result.data.response.results.map
   (item=>({
     id:item.id,
     title:item.webTitle,
@@ -273,12 +278,13 @@ export async function  SportsGuardingArticle(
     apiUrl:item.apiUrl,
 
   }));
+});
  
 
 
   return res.status(200).json({
     success:true,
-    article:data,
+    article:articles,
     
   });
 }
