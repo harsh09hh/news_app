@@ -266,6 +266,7 @@ export async function  SportsGuardingArticle(
   params: {
     section: "sport",
     "order-by": "newest",
+    "from-date": new Date(Date.now() - 7*24*60*60*1000).toISOString().split("T")[0], 
     "show-fields": "headline,trailText,thumbnail",
     "page-size": 20,
     "api-key": process.env.GUARDIAN_API_KEY,
