@@ -8,6 +8,7 @@ import { businessGuardingArticle, cryptoGuardingArticle, GuardianPoliticsArticle
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
+import { Skletonloading } from "@/components/SkletonLoding";
 
 
 const Home=()=>{
@@ -248,7 +249,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                {isloading? (
-                <p>loading trending article</p>
+                <Skletonloading/>
                ): (
                 tendingnews.map((article, index)=>(
                 <GuardianNewsCars key={index} article={article}/>
