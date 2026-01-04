@@ -39,12 +39,16 @@ export async function GuardianPolitics(req:Request,res:Response) {
       article: articles,
     });
 
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Guardian politics failed",
-    });
   }
+  catch (error: any) {
+  console.error("Guardian API ERROR:", error?.response?.data || error?.message || error);
+
+  res.status(500).json({
+    success: false,
+    message: "Guardian API failed",
+    error: error?.response?.data || error?.message
+  });
+}
 }
 
 
@@ -107,7 +111,7 @@ export async function  TrendingGuardingArticle(
     params: {
       q: "world OR global OR breaking",
       "order-by": "newest",
-      "from-date": "2025-12-24",   
+      "from-date": new Date(Date.now() - 7*24*60*60*1000).toISOString().split("T")[0],  
       "show-fields": "headline,trailText,thumbnail",
       "page-size": 20,
       "api-key": process.env.GUARDIAN_API_KEY,
@@ -162,7 +166,7 @@ export async function  CryptoGuardingArticle(
     params: {
       q: "crypto OR cryptocurrency OR bitcoin OR ethereum",
       "order-by": "newest",
-      "from-date": "2025-12-24",
+      "from-date": new Date(Date.now() - 7*24*60*60*1000).toISOString().split("T")[0], 
       "show-fields": "headline,trailText,thumbnail",
       "page-size": 20,
       "api-key": process.env.GUARDIAN_API_KEY,
@@ -200,7 +204,7 @@ catch(error){
   })
 }
 }
-
+ 
 
 export async function  businessGuardingArticle(
   req:Request,res:Response,next:NextFunction
