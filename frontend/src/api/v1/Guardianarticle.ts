@@ -107,3 +107,18 @@ export async function moviesGuardingArticle(){
 }
 
 
+export async function healthGuardingArticle(){
+    try{
+
+    const result = await api.get<GuardianResponse>('/Guardian/health')
+    
+    return result.data;
+    }
+    catch(error){
+        throw new Error("failed to fetch the  trending article");
+      
+
+    }
+
+}
+

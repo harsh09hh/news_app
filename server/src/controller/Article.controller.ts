@@ -351,3 +351,50 @@ catch(error){
   })
 }
 }
+
+
+
+
+export async function GuardianHealth(req: Request, res: Response) {
+  try {
+    const articles = await getOrSetCache(
+      "guardian:health",
+      180,
+      async () => {
+        const result = await axios.get<GuardianApiResponse>(
+          "https://content.guardianapis.com/search",
+          {
+            params: {
+              section: "science",
+              q: "health medicine medical healthcare",
+              "order-by": "newest",
+              "show-fields": "headline,trailText,thumbnail",
+              "page-size": 25,
+              "api-key": process.env.GUARDIAN_API_KEY,
+            },
+          }
+        );
+
+        return result.data.response.results.map((item) => ({
+          id: item.id,
+          title: item.webTitle,
+          description: item.fields?.trailText ?? "",
+          image: item.fields?.thumbnail ?? null,
+          publishedAt: item.webPublicationDate,
+          apiUrl: item.apiUrl,
+        }));
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      article: articles,
+    });
+  } catch (error) {
+    console.error("GuardianHealth error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Guardian health API failed",
+    });
+  }
+}

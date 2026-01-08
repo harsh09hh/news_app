@@ -4,7 +4,7 @@ import type Articles from "../types";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
-import { businessGuardingArticle, cryptoGuardingArticle, GuardianPoliticsArticle, moviesGuardingArticle, sportGuardingArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
+import { businessGuardingArticle, cryptoGuardingArticle, GuardianPoliticsArticle, healthGuardingArticle, moviesGuardingArticle, sportGuardingArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
@@ -22,7 +22,7 @@ const Home=()=>{
     const[crypto,setcrypto]=useState<GuardianArticle[]>([]);
     const[stock,setstock]=useState<Articles[]>([]);
     const[movies ,setmovies] =useState<GuardianArticle[]>([]);
-    const[wallstreet ,setwallstreet] =useState<Articles[]>([]);
+    const[health ,sethealth] =useState<GuardianArticle[]>([]);
     const[thehindu ,setthehindu]=useState<Articles[]>([]);
     const[nbc ,setnbc]=useState<Articles[]>([]);
     const[timesofindia ,settimesofindia]=useState<Articles[]>([]);
@@ -66,29 +66,7 @@ const loadstocknews=async ()=>{
 
 }
 
-const loadwallstreetjournal=async ()=>{
 
-    try{
-        setisloading(true);
-    
-    const endpoint=`https://newsapi.org/v2/top-headlines?sources=the-wall-street-journal&apiKey=${API_KEY}`
-
-    const response= await fetch(endpoint);
-    if(!response.ok){
-        console.log("failed to fetch terndingnews");
-    }
-
-    const data = await response.json();
-    setwallstreet(data.articles ||[]);
-    }
-    catch(error){
-        console.log("trending news",error);
-        setwallstreet([]);
-    }
-    finally{setisloading(false)};
-
-
-}
 
 
 const loadnewyorktimes=async ()=>{
@@ -171,7 +149,7 @@ useEffect(()=>{
 
   const fetchall=()=>{
   
-   loadwallstreetjournal();
+   
    loadnbs();
    loadnewyorktimes();
    loadtimesofindia();
@@ -194,8 +172,13 @@ TrendingGuardingArticle()
 
   cryptoGuardingArticle().then((res) => setcrypto(res.article))
   .catch(err => console.error(err));
+
+  healthGuardingArticle().then((res)=>sethealth(res.article))
+  .catch(err => console.error(err));
+
   }
   fetchall();
+
 
 
 },[])
@@ -295,34 +278,6 @@ TrendingGuardingArticle()
 
 
 
-            {/* <section>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Stocks</h2>
-            <div className="overflow-x-auto">
-              <div className="flex gap-6 w-max">
-                {isloading ? (
-                  <p>Loading Trending News...</p>
-                ) : (
-                   crypto.map((article, index) => (
-                    <GuardianNewsCars key={index} article={article} />
-                  ))
-                )}
-              </div>
-            </div>
-          </section> */}
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
            <section>
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Movies</h2>
             <div className="overflow-x-auto">
@@ -348,8 +303,8 @@ TrendingGuardingArticle()
                 {isloading ? (
                   <Skletonloading/>
                 ) : (
-                  wallstreet.map((article, index) => (
-                    <Newscard key={index} article={article} />
+                 health.map((article, index) => (
+                    <GuardianNewsCars key={index} article={article} />
                   ))
                 )}
               </div>
