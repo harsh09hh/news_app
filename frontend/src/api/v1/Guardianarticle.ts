@@ -91,3 +91,19 @@ export async function cryptoGuardingArticle(){
 
 }
 
+export async function moviesGuardingArticle(){
+    try{
+
+    const result = await api.get<GuardianResponse>('/Guardian/movies')
+    
+    return result.data;
+    }
+    catch(error){
+        throw new Error("failed to fetch the  trending article");
+      
+
+    }
+
+}
+
+

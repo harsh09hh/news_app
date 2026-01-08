@@ -4,7 +4,7 @@ import type Articles from "../types";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
-import { businessGuardingArticle, cryptoGuardingArticle, GuardianPoliticsArticle, sportGuardingArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
+import { businessGuardingArticle, cryptoGuardingArticle, GuardianPoliticsArticle, moviesGuardingArticle, sportGuardingArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
 import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
@@ -21,7 +21,7 @@ const Home=()=>{
     const[business,setbusiness]=useState<GuardianArticle[]>([]);
     const[crypto,setcrypto]=useState<GuardianArticle[]>([]);
     const[stock,setstock]=useState<Articles[]>([]);
-    const[washingtonpost ,setwashingtonpost] =useState<Articles[]>([]);
+    const[movies ,setmovies] =useState<GuardianArticle[]>([]);
     const[wallstreet ,setwallstreet] =useState<Articles[]>([]);
     const[thehindu ,setthehindu]=useState<Articles[]>([]);
     const[nbc ,setnbc]=useState<Articles[]>([]);
@@ -37,29 +37,7 @@ const Home=()=>{
 
 
 
-const loadwashingtonpost =async()=>{
 
-  try{
-    setisloading(true)
-  const endpoint =`https://newsapi.org/v2/top-headlines?sources=the-washington-post&apiKey=${API_KEY}`
-
-  const response =await fetch(endpoint);
-
-  if(!response.ok){
-    console.log("could not load the article for washinton post");
-  }
-  const data =await response.json();
-  setwashingtonpost(data.articles ||[]);
-  }
-  catch(error){
-    console.error(error);
-  }
-  finally{
-    setisloading(false);
-  }
-
-
-}
 
 
 
@@ -192,7 +170,7 @@ const loadtimesofindia=async ()=>{
 useEffect(()=>{
 
   const fetchall=()=>{
-    loadwashingtonpost();
+  
    loadwallstreetjournal();
    loadnbs();
    loadnewyorktimes();
@@ -205,6 +183,10 @@ GuardianPoliticsArticle()
 TrendingGuardingArticle()
   .then((res) => settending(res.article))
   .catch(err => console.error(err));
+
+  moviesGuardingArticle()
+    .then((res) => setmovies(res.article))
+    .catch(console.error);
 
 
   businessGuardingArticle().then((res) => setbusiness(res.article))
@@ -342,14 +324,14 @@ TrendingGuardingArticle()
 
 
            <section>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Washington Post</h2>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Movies</h2>
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
                   <p>Loading Trending News...</p>
                 ) : (
-                  washingtonpost.map((article, index) => (
-                    <Newscard key={index} article={article} />
+                  movies.map((article, index) => (
+                    <GuardianNewsCars key={index} article={article} />
                   ))
                 )}
               </div>

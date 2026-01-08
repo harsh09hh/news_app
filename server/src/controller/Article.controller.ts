@@ -16,6 +16,7 @@ export async function GuardianPolitics(req:Request,res:Response) {
             params: {
               section: "politics",
               "order-by": "newest",
+              "from-date": new Date(Date.now() - 7*24*60*60*1000).toISOString().split("T")[0],
               "show-fields": "headline,trailText,thumbnail",
               "page-size": 20,
               "api-key": process.env.GUARDIAN_API_KEY,
@@ -163,14 +164,14 @@ export async function  CryptoGuardingArticle(
  const result = await axios.get<GuardianApiResponse>(
   "https://content.guardianapis.com/search",
   {
-    params: {
-      q: "crypto OR cryptocurrency OR bitcoin OR ethereum",
-      "order-by": "newest",
-      "from-date": new Date(Date.now() - 7*24*60*60*1000).toISOString().split("T")[0], 
-      "show-fields": "headline,trailText,thumbnail",
-      "page-size": 20,
-      "api-key": process.env.GUARDIAN_API_KEY,
-    },
+params: {
+  tag: "technology/cryptocurrencies|business/cryptocurrencies",
+  "order-by": "newest",
+  "show-fields": "headline,trailText,thumbnail",
+  "page-size": 25,
+  "api-key": process.env.GUARDIAN_API_KEY,
+}
+
   }
 );
 
@@ -271,6 +272,54 @@ export async function  SportsGuardingArticle(
     "page-size": 20,
     "api-key": process.env.GUARDIAN_API_KEY,
   },
+});
+
+  return result.data.response.results.map
+  (item=>({
+    id:item.id,
+    title:item.webTitle,
+    description: item.fields?.trailText ?? "",
+    image: item.fields?.thumbnail ?? null,
+    publishedAt:item.webPublicationDate,
+    apiUrl:item.apiUrl,
+
+  }));
+});
+ 
+
+
+  return res.status(200).json({
+    success:true,
+    article:articles,
+    
+  });
+}
+
+catch(error){
+  res.status(500).json({
+    success:false,
+    message:"Guardian sports API failed"
+
+  })
+}
+}
+
+
+
+
+export async function GuardianMovies(req:Request,res:Response){
+  try{
+    const articles= await getOrSetCache("guardian:sports",180,async()=>{
+
+ const result = await axios.get<GuardianApiResponse>("https://content.guardianapis.com/search", {
+ params: {
+  section: "culture",
+  tag: "film/film",
+  "show-fields": "headline,trailText,thumbnail",
+  "order-by": "newest",
+  "page-size": 20,
+  "api-key": process.env.GUARDIAN_API_KEY,
+}
 });
 
   return result.data.response.results.map
