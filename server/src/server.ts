@@ -37,38 +37,6 @@ app.use('/api/v1/analyze',Summary);
 app.use('/api/v1/users',userRoutes);
 app.use('/api/v1/Guardian',GuardianArticle);
 
-
-app.post('/api/v1/chat',async(req,res)=>{
-  try{
-    const {prompt}= req.body;
-     const model = "meta-llama/Meta-Llama-3-8B-Instruct";
-      const response = await axios.post(
-        "https://router.huggingface.co/v1/chat/completions",
-        {
-          model: "meta-llama/Llama-3.2-3B-Instruct",
-          messages: [
-            { role: "user", content: prompt }
-          ]
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.HF_API_KEY}`,
-          }
-        }
-      );
-      return res.json(response.data);
-  }
-  catch(err:any){
-    console.error("HF Error:", err?.response?.data || err.message);
-  return res.status(500).json({
-    error: "HuggingFace request failed",
-    details: err?.response?.data || err.message
-  });
-  }
-
-
-})
-
 app.use('/api/v1',verifyToken,ProtectedRoute)
 app.use(errorMiddelware);
 

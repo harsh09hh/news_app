@@ -22,7 +22,7 @@ export const getUsers=async(req:Request,res:Response,next:NextFunction)=>{
     }
 
     catch(error){
-        next(error);
+        res.status(404).json({message:"user  not found"});
     }
 }
 
@@ -43,7 +43,7 @@ export const getUser=async(req:Request,res:Response,next:NextFunction)=>{
     }
 
     catch(error){
-        next(error);
+        res.status(401).json({ message: "Unauthorized"})
     }
 }
 
