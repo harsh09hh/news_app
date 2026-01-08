@@ -249,7 +249,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading politics News...</p>
+                  <Skletonloading/>
                 ) : (
                  politics.map((article, index) => (
                     <GuardianNewsCars key={index} article={article}/>
@@ -266,7 +266,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading Trending News...</p>
+                  <Skletonloading/>
                 ) : (
                   business.map((article, index) => (
                     <GuardianNewsCars key={index} article={article} />
@@ -282,7 +282,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading Trending News...</p>
+                  <Skletonloading/>
                 ) : (
                   crypto.map((article, index) => (
                     <GuardianNewsCars key={index} article={article} />
@@ -328,7 +328,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading Trending News...</p>
+                  <Skletonloading/>
                 ) : (
                   movies.map((article, index) => (
                     <GuardianNewsCars key={index} article={article} />
@@ -346,7 +346,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading Trending News...</p>
+                  <Skletonloading/>
                 ) : (
                   wallstreet.map((article, index) => (
                     <Newscard key={index} article={article} />
@@ -371,7 +371,7 @@ TrendingGuardingArticle()
             <div className="overflow-x-auto">
               <div className="flex gap-6 w-max">
                 {isloading ? (
-                  <p>Loading Trending News...</p>
+                  <Skletonloading/>
                 ) : (
                   nbc.map((article, index) => (
                     <Newscard key={index} article={article} />
