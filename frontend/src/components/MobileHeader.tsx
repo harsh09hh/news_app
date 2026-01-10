@@ -1,7 +1,9 @@
 import { Menu } from "lucide-react";
 import { useSidebar } from "./ui/sidebar";
-
+import {  useNavigate } from "react-router-dom";
 export default function MobileHeader(){
+
+const navigate=useNavigate();
 
 
   const{openMobile,setOpenMobile}= useSidebar();
@@ -13,7 +15,7 @@ export default function MobileHeader(){
       <button onClick={()=>setOpenMobile(!openMobile)} className="p-2">
       <Menu />
       </button>
-      <h1 className="flex-1 text-center font-bold text-lg">
+      <h1 className="flex-1 text-center font-bold text-lg" onClick={()=>navigate('/')}>
         The Daily Draft
       </h1>
       <div className="w-8" />
