@@ -198,7 +198,7 @@ TrendingGuardingArticle()
    
 
        
-         <div className="lg:pl-[var(--sidebar-width)] mt-14 lg:mt-0 h-screen overflow-y-auto w-full p-6 space-y-10">
+         <div className="mt-14 lg:mt-0 h-screen overflow-y-auto w-full p-6 space-y-10">
 
           {/* Header */}
           <div>

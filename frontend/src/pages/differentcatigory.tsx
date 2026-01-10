@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { businessGuardingArticle, GuardianPoliticsArticle, sportGuardingArticle, TrendingGuardingArticle } from "@/api/v1/Guardianarticle";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
 import type { GuardianArticle } from "@/types";
+import MobileHeader from "@/components/MobileHeader";
 
 
 
@@ -64,19 +65,20 @@ const Differentcatigory=()=>{
     return (
   <div className="flex">
     <SidebarProvider>
-      
-      <div className="w-[250px] h-screen fixed top-0 left-0 border-r z-50 bg-white">
-        <AppSidebar />
-      </div>
+      <MobileHeader />
+      <AppSidebar />
 
-      
-      <div className="ml-[250px] flex-1 p-4">
-        <h2 className="text-xl font-semibold mb-4">{category}</h2>
+      <div className="mt-14 lg:mt-0 h-screen overflow-y-auto w-full p-6">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6 capitalize">{category}</h2>
 
-        <div className="grid grid-cols-3 gap-4">
-          {lodingcatigory.map((article, index) => (
-            <GuardianNewsCars key={index} article={article}/>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {isloding ? (
+            <div>Loading...</div>
+          ) : (
+            lodingcatigory.map((article, index) => (
+              <GuardianNewsCars key={index} article={article}/>
+            ))
+          )}
         </div>
       </div>
     </SidebarProvider>
