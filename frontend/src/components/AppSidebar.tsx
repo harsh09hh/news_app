@@ -30,7 +30,7 @@ export function AppSidebar() {
   
    const navigate =useNavigate();
   return (
-    <Sidebar>
+    <Sidebar collapsible="offcanvas">
      <SidebarContent>
         <SidebarHeader>
             <div className="flex items-center justify-between text-xl font-bold w-full">

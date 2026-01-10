@@ -9,6 +9,7 @@ import { mapGuardianToArticle } from "@/lib/utils";
 import type { GuardianArticle } from "../types";
 import { GuardianNewsCars } from "@/components/NewsCard.Guardian";
 import { Skletonloading } from "@/components/SkletonLoding";
+import MobileHeader from "@/components/MobileHeader";
 
 
 const Home=()=>{
@@ -189,14 +190,16 @@ TrendingGuardingArticle()
  return (
     <div className="flex">
       <SidebarProvider>
-        
-        <div className="w-[250px] h-screen fixed top-0 left-0 border-r z-50 bg-white">
-      <AppSidebar />
-</div>
 
+          <MobileHeader />
+        
+       
+          <AppSidebar />
+   
 
        
-        <div className="ml-[250px] h-screen overflow-y-auto w-full p-6 space-y-10">
+         <div className="lg:pl-[var(--sidebar-width)] mt-14 lg:mt-0 h-screen overflow-y-auto w-full p-6 space-y-10">
+
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold text-gray-900">The Daily Draft</h1>
